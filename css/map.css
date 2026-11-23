@@ -1,0 +1,645 @@
+/* ==========================================================================
+   BICIS — Interactive Community Map (Barangay Dimagiba, Legazpi City, Albay)
+   Custom Inline SVG + CSS Transforms + MDX-Inspired Cursor Interaction
+   ========================================================================== */
+
+.hero-map-column {
+  position: relative;
+  min-height: 540px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+}
+
+.map-wrapper {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 540px;
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  touch-action: none;
+}
+
+.map-wrapper.is-dragging {
+  cursor: grabbing;
+}
+
+/* Fullscreen Fallback / Expanded State */
+.map-wrapper.is-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  border-radius: 0;
+}
+
+/* Subtle Architectural Map Backdrop Grid */
+.map-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 48px 48px;
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Transform Stage */
+.map-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center center;
+  will-change: transform;
+  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+.map-wrapper.is-dragging .map-stage {
+  transition: none;
+}
+
+.bicis-map-svg {
+  width: 100%;
+  height: 100%;
+  min-width: 720px;
+  min-height: 560px;
+  display: block;
+}
+
+/* ==========================================================================
+   SVG Cartographic Styling (Adapts Automatically to Light & Dark Mode)
+   ========================================================================== */
+.map-contour {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1;
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.map-gulf-water {
+  fill: var(--border);
+  opacity: 0.24;
+  transition: opacity var(--transition-fast), fill var(--transition-fast);
+}
+
+.map-boundary-halo {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-dasharray: 6 6;
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+/* Interactive Zones */
+.map-zone {
+  fill: var(--bg-elevated);
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  opacity: 0.85;
+  cursor: pointer;
+  transition:
+    fill var(--transition-fast),
+    stroke var(--transition-fast),
+    stroke-width var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.map-zone:hover,
+.map-zone.is-hovered,
+.map-zone.is-selected {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  opacity: 1;
+}
+
+/* Roads */
+.map-road-secondary {
+  fill: none;
+  stroke: var(--border-strong);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  cursor: pointer;
+  opacity: 0.58;
+  transition:
+    stroke var(--transition-fast),
+    stroke-width var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.map-road-primary {
+  fill: none;
+  stroke: var(--text-secondary);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  cursor: pointer;
+  opacity: 0.72;
+  transition:
+    stroke var(--transition-fast),
+    stroke-width var(--transition-fast),
+    opacity var(--transition-fast);
+}
+
+.map-road-casing {
+  fill: none;
+  stroke: var(--bg-primary);
+  stroke-width: 7.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.map-road-primary:hover,
+.map-road-primary.is-hovered,
+.map-road-primary.is-selected {
+  stroke: var(--accent);
+  stroke-width: 6;
+  opacity: 1;
+}
+
+.map-road-secondary:hover,
+.map-road-secondary.is-hovered,
+.map-road-secondary.is-selected {
+  stroke: var(--accent);
+  stroke-width: 3.6;
+  opacity: 1;
+}
+
+/* Map Typography Labels */
+.map-label-region {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  fill: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.map-label-road {
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  fill: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.map-label-detail {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  fill: var(--text-secondary);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+/* Reveal Extra Map Details When Zoomed In */
+.map-wrapper.zoom-detail-med .map-label-road {
+  opacity: 0.85;
+}
+
+.map-wrapper.zoom-detail-high .map-label-road,
+.map-wrapper.zoom-detail-high .map-label-detail {
+  opacity: 0.95;
+}
+
+.map-wrapper.zoom-detail-high .map-road-secondary {
+  opacity: 0.9;
+}
+
+/* Location Markers */
+.map-marker {
+  cursor: pointer;
+  outline: none;
+}
+
+.map-marker-hit {
+  fill: transparent;
+}
+
+.map-marker-outer {
+  fill: var(--bg-primary);
+  stroke: var(--text-primary);
+  stroke-width: 1.8;
+  transition:
+    transform var(--transition-fast),
+    stroke var(--transition-fast),
+    fill var(--transition-fast);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.map-marker-core {
+  fill: var(--accent);
+  transition: transform var(--transition-fast);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.map-marker:hover .map-marker-outer,
+.map-marker:focus-visible .map-marker-outer,
+.map-marker.is-hovered .map-marker-outer,
+.map-marker.is-selected .map-marker-outer {
+  stroke: var(--accent);
+  fill: var(--accent);
+  transform: scale(1.22);
+}
+
+.map-marker:hover .map-marker-core,
+.map-marker:focus-visible .map-marker-core,
+.map-marker.is-hovered .map-marker-core,
+.map-marker.is-selected .map-marker-core {
+  fill: #FFFFFF;
+}
+
+.map-marker-label {
+  font-family: var(--font-sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  fill: var(--text-primary);
+  pointer-events: none;
+  transition: fill var(--transition-fast);
+}
+
+.map-marker:hover .map-marker-label,
+.map-marker.is-selected .map-marker-label {
+  fill: var(--accent);
+}
+
+/* Primary Barangay Dimagiba Center Beacon */
+.map-marker--primary .map-marker-outer {
+  fill: var(--accent);
+  stroke: var(--bg-primary);
+  stroke-width: 2.5;
+}
+
+.map-marker--primary .map-marker-core {
+  fill: #FFFFFF;
+}
+
+.map-pulse-ring {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   MDX-Inspired Cursor-Following Tooltip
+   ========================================================================== */
+.map-cursor-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 25;
+  pointer-events: none;
+  min-width: 170px;
+  max-width: 260px;
+  padding: 0.65rem 0.85rem;
+  background-color: var(--bg-glass-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-elevated);
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform, opacity;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.map-cursor-tooltip.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip-category {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.tooltip-category::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent);
+}
+
+.tooltip-title {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.tooltip-meta {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+/* ==========================================================================
+   Floating Map Overlays (Top Bar, Location Card, Zoom Controls, Detail Panel)
+   ========================================================================== */
+.map-top-bar {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  z-index: 15;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  pointer-events: none;
+}
+
+.map-badge-pill {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.42rem 0.78rem;
+  background-color: var(--bg-glass-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.map-badge-pill strong {
+  color: var(--text-primary);
+}
+
+/* Dedicated Map Controls (+ / - / Reset / Fullscreen) */
+.map-controls {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.map-control-group {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-glass-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  overflow: hidden;
+  box-shadow: var(--shadow-subtle);
+}
+
+.map-ctrl-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 1.15rem;
+  font-weight: 500;
+  border-bottom: 1px solid var(--border);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.map-ctrl-btn:last-child {
+  border-bottom: none;
+}
+
+.map-ctrl-btn:hover {
+  background-color: var(--accent);
+  color: #FFFFFF;
+}
+
+.map-ctrl-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.map-ctrl-btn:disabled:hover {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.map-ctrl-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.map-zoom-readout {
+  text-align: center;
+  padding: 0.3rem 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  background-color: var(--bg-glass-strong);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+}
+
+/* Floating Location Information Card (Bottom Left) */
+.map-location-card {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 15;
+  max-width: 310px;
+  padding: 0.95rem 1.15rem;
+  background-color: var(--bg-glass-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-subtle);
+  transition: border-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.location-card-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.location-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.location-card-title {
+  font-family: var(--font-sans);
+  font-size: 0.96rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+
+.location-card-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 0.18rem;
+}
+
+/* Selected Feature Info Panel (Bottom Right — Dismissible) */
+.map-detail-panel {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 18;
+  width: min(320px, calc(100% - 2rem));
+  padding: 1.1rem 1.2rem;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-xs);
+  box-shadow: var(--shadow-elevated);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    visibility var(--transition-base);
+}
+
+.map-detail-panel.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.map-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.map-detail-tag {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.map-detail-close {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.map-detail-close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.map-detail-title {
+  font-family: var(--font-serif);
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 0.4rem;
+}
+
+.map-detail-desc {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 0.75rem;
+}
+
+.map-detail-disclaimer {
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+/* Hint Strip at Bottom Center (Desktop) */
+.map-interaction-hint {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 12;
+  padding: 0.38rem 0.75rem;
+  background-color: var(--bg-glass);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.map-wrapper.has-selection .map-interaction-hint {
+  opacity: 0;
+}

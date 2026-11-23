@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Create your resident account on the Barangay Integrated Community Information System (BICIS) — Barangay Dimagiba, Legazpi City, Albay.">
+  <title>Register — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/auth.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="auth-page-body">
+  <a href="#main-content" class="skip-link">Skip to registration form</a>
+
+  <!-- Navigation -->
+  <header class="site-header is-solid">
+    <div class="container nav-inner">
+      <a href="../index.html" class="brand-link" aria-label="BICIS Home">
+        <svg class="brand-emblem" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 3.5L40.5 11.5V24.5C40.5 33.6 33.5 40.3 24 44.5C14.5 40.3 7.5 33.6 7.5 24.5V11.5L24 3.5Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M14.5 29C15.5 24.2 19.3 21.2 24 21.2C28.7 21.2 32.5 24.2 33.5 29" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+          <path d="M18.5 33.5C20.1 31.8 21.9 31 24 31C26.1 31 27.9 31.8 29.5 33.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          <circle cx="16.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="31.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="24" cy="14.5" r="3.4" fill="var(--accent)"></circle>
+          <circle cx="24" cy="26.5" r="2" fill="var(--accent)"></circle>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">BICIS</span>
+          <span class="brand-sub">Community Information System</span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About BICIS</a></li>
+          <li><a href="services.html" class="nav-link">Community Services</a></li>
+          <li><a href="portal.html" class="nav-link">System Portal</a></li>
+          <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5"></circle>
+            <line x1="12" y1="2.5" x2="12" y2="5"></line>
+            <line x1="12" y1="19" x2="12" y2="21.5"></line>
+            <line x1="4.9" y1="4.9" x2="6.7" y2="6.7"></line>
+            <line x1="17.3" y1="17.3" x2="19.1" y2="19.1"></line>
+            <line x1="2.5" y1="12" x2="5" y2="12"></line>
+            <line x1="19" y1="12" x2="21.5" y2="12"></line>
+            <line x1="4.9" y1="19.1" x2="6.7" y2="17.3"></line>
+            <line x1="17.3" y1="6.7" x2="19.1" y2="4.9"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+
+        <a href="login.html" class="btn btn-secondary btn-sm nav-auth-desktop">Login</a>
+
+        <button type="button" class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav aria-label="Mobile Navigation">
+      <ul class="mobile-nav-list">
+        <li><a href="../index.html">Home <span>01</span></a></li>
+        <li><a href="about.html">About BICIS <span>02</span></a></li>
+        <li><a href="services.html">Community Services <span>03</span></a></li>
+        <li><a href="privacy.html">Privacy Notice <span>04</span></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-drawer-footer">
+      <a href="login.html" class="btn btn-primary btn-block">Login to BICIS</a>
+    </div>
+  </div>
+
+  <!-- Main Registration Layout -->
+  <main id="main-content" class="auth-main">
+    <div class="container">
+      <div class="auth-grid">
+        <!-- Left Editorial Column -->
+        <div class="auth-aside" data-reveal>
+          <span class="eyebrow eyebrow--accent">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            <span>Resident Registration</span>
+          </span>
+
+          <h1 class="auth-aside-title">
+            Stay Connected With Barangay Dimagiba.
+          </h1>
+
+          <p class="auth-aside-desc">
+            We only request essential information needed to establish your resident account and keep communications secure. Review our Privacy Terms and Agreement before registering.
+          </p>
+
+          <div class="auth-location-strip">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            <span><strong>RA 10173 Aligned</strong> · Philippine Data Privacy Act of 2012</span>
+          </div>
+
+          <!-- PRIVACY NOTICE CARD -->
+          <button type="button" class="privacy-notice-card" data-modal-open="privacy-modal">
+            <span class="privacy-notice-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                <line x1="9" y1="7" x2="16" y2="7"></line>
+                <line x1="9" y1="11" x2="14" y2="11"></line>
+              </svg>
+            </span>
+            <span>
+              <span class="privacy-notice-tag">PRIVACY NOTICE</span>
+              <span class="privacy-notice-title">Your information, handled responsibly.</span>
+              <span class="privacy-notice-desc">
+                Learn how BICIS collects, uses, and protects your personal information when you create and access your account.
+              </span>
+            </span>
+            <span class="privacy-notice-arrow" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </span>
+          </button>
+        </div>
+
+        <!-- Right Registration Card -->
+        <section class="auth-card" aria-labelledby="register-heading" data-reveal data-reveal-delay="1">
+          <div class="auth-card-header">
+            <span class="eyebrow">New Account</span>
+            <h2 id="register-heading" class="auth-heading">Create your account</h2>
+            <p class="auth-subheading">
+              Complete the fields below to prepare your BICIS resident profile.
+            </p>
+          </div>
+
+          <form id="bicis-register-form" class="form-stack" action="../api/register.php" method="POST" novalidate>
+            <div id="register-form-banner" class="form-banner" role="alert"></div>
+
+            <div class="form-field">
+              <label class="form-label" for="register-name">Full Name</label>
+              <input
+                type="text"
+                id="register-name"
+                name="full_name"
+                class="form-input"
+                placeholder="Maria Clara Santos"
+                autocomplete="name"
+                required
+              >
+              <span id="register-name-error" class="field-error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="register-email">Email Address</label>
+              <input
+                type="email"
+                id="register-email"
+                name="email"
+                class="form-input"
+                placeholder="name@example.com"
+                autocomplete="email"
+                required
+              >
+              <span id="register-email-error" class="field-error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="register-purok">
+                <span>Purok / Residence Zone</span>
+                <span class="form-label-optional">Optional</span>
+              </label>
+              <input
+                type="text"
+                id="register-purok"
+                name="purok"
+                class="form-input"
+                placeholder="e.g., Purok 1, Barangay Dimagiba"
+              >
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="register-password">Password</label>
+              <div class="password-input-wrap">
+                <input
+                  type="password"
+                  id="register-password"
+                  name="password"
+                  class="form-input"
+                  placeholder="At least 8 characters"
+                  autocomplete="new-password"
+                  required
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  data-password-toggle="register-password"
+                  aria-label="Show password"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-closed" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <div id="password-strength" class="password-strength" aria-live="polite">
+                <div class="strength-bars" aria-hidden="true">
+                  <span class="strength-bar"></span>
+                  <span class="strength-bar"></span>
+                  <span class="strength-bar"></span>
+                  <span class="strength-bar"></span>
+                </div>
+                <span class="strength-label">Enter at least 8 characters</span>
+              </div>
+              <span id="register-password-error" class="field-error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-field">
+              <label class="form-label" for="register-confirm">Confirm Password</label>
+              <div class="password-input-wrap">
+                <input
+                  type="password"
+                  id="register-confirm"
+                  name="confirm_password"
+                  class="form-input"
+                  placeholder="Re-enter your password"
+                  autocomplete="new-password"
+                  required
+                >
+                <button
+                  type="button"
+                  class="password-toggle-btn"
+                  data-password-toggle="register-confirm"
+                  aria-label="Show confirm password"
+                  aria-pressed="false"
+                >
+                  <svg class="icon-eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg class="icon-eye-closed" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"></path>
+                    <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+              <span id="register-confirm-error" class="field-error" aria-live="polite"></span>
+            </div>
+
+            <!-- Unchecked Privacy Terms & Agreement Consent -->
+            <div class="form-field">
+              <label class="checkbox-field" for="register-privacy">
+                <input type="checkbox" id="register-privacy" name="privacy_agreement" required>
+                <span>
+                  I have read and agree to the
+                  <button type="button" class="inline-action-link" data-modal-open="privacy-modal">Privacy Terms and Agreement</button>.
+                </span>
+              </label>
+              <span id="register-privacy-error" class="field-error" aria-live="polite"></span>
+            </div>
+
+            <button type="submit" id="register-submit-btn" class="btn btn-primary btn-block">
+              <span>Register Account</span>
+              <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+          </form>
+
+          <div class="auth-switch-footer">
+            Already have a BICIS account?
+            <a href="login.html" class="inline-action-link">Return to login</a>
+          </div>
+
+          <div class="auth-backend-note">
+            <strong>Security &amp; Backend Note:</strong> Registration requires a secure server backend (such as PHP &amp; MySQL via XAMPP at <code>api/register.php</code>) to hash passwords and store records safely. This static frontend does not save passwords in browser storage.
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" style="padding-block: 1.75rem;">
+    <div class="container">
+      <div class="footer-bottom" style="padding-top: 0;">
+        <span>&copy; Barangay Integrated Community Information System (BICIS) — Barangay Dimagiba, Legazpi City, Albay.</span>
+        <span>
+          <a href="privacy.html" class="inline-action-link">Privacy Terms &amp; Agreement</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Privacy Terms & Agreement Modal -->
+  <div id="privacy-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow eyebrow--accent">Privacy Terms &amp; Agreement</span>
+          <h2 id="privacy-modal-title" class="modal-title">Your Information, Handled Responsibly</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close privacy notice">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This Privacy Terms and Agreement explains how the <strong>Barangay Integrated Community Information System (BICIS)</strong> collects, uses, and safeguards your account information in accordance with the <strong>Philippine Data Privacy Act of 2012 (Republic Act No. 10173)</strong>.
+        </p>
+        <div class="privacy-clause">
+          <h3>1. Why BICIS Requires an Email Address</h3>
+          <p>An email address is requested to uniquely identify your resident account and provide a reliable contact channel for essential account actions.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>2. Registration and Login</h3>
+          <p>Your email address is used during registration and sign-in authentication when BICIS is connected to its authorized barangay server backend.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>3. Account Verification</h3>
+          <p>Your email address may be used to verify that you own the submitted address and to help prevent duplicate or unauthorized registrations.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>4. Password Recovery</h3>
+          <p>If you forget your password, your registered email address may be used to deliver password-recovery instructions or reset links.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>5. Essential Account-Related Notifications</h3>
+          <p>Your email is used strictly for essential account-related notices (security alerts, verification updates, or requested community account updates) and not for unrelated purposes without legal basis and transparent consent.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>6. Storage and Protection of Personal Information</h3>
+          <p>This static frontend does not store real passwords in localStorage. Upon live deployment on a barangay server (such as PHP/MySQL under XAMPP), administrators are responsible for maintaining appropriate technical, physical, and organizational safeguards, including secure password hashing and access controls.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>7. How to Request Assistance Regarding Your Information</h3>
+          <p>Under RA 10173, you have the right to inquire about, access, correct, or request removal of inaccurate or unnecessary personal information, subject to lawful barangay record-keeping requirements.</p>
+        </div>
+        <div class="privacy-clause">
+          <h3>8. Contacting the BICIS Administrator</h3>
+          <p>For privacy questions or data requests, contact the designated BICIS Administrator or Barangay Data Protection Officer at Barangay Dimagiba, Legazpi City, Albay.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="privacy.html" class="inline-action-link">Open Full Privacy Page</a>
+        <button type="button" class="btn btn-primary btn-sm" data-modal-close>Done Reviewing</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Barangay Integrated Community Information System (BICIS) for Barangay Dimagiba, Legazpi City, Albay — accessible barangay services, DRRM, GAD, and Social Welfare information.">
+  <title>BICIS — Barangay Integrated Community Information System</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logos/bicis-favicon.svg">
+
+  <!-- Prevent theme flash before first paint -->
+  <script>S
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/carousel.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ======================================================================
+       CUSTOM BICIS LOADING SCREEN
+       ====================================================================== -->
+  <div id="bicis-loader" class="bicis-loader" role="status" aria-label="Loading BICIS">
+    <div class="loader-stage">
+      <div class="loader-emblem-wrap" aria-hidden="true">
+        <svg class="loader-orbit" viewBox="0 0 96 96">
+          <circle class="loader-orbit-track" cx="48" cy="48" r="44"></circle>
+          <circle class="loader-orbit-arc" cx="48" cy="48" r="44"></circle>
+        </svg>
+        <svg class="loader-emblem-svg" viewBox="0 0 48 48">
+          <path class="loader-shield" d="M24 3.5L40.5 11.5V24.5C40.5 33.6 33.5 40.3 24 44.5C14.5 40.3 7.5 33.6 7.5 24.5V11.5L24 3.5Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"></path>
+          <path class="loader-arc" d="M14.5 29C15.5 24.2 19.3 21.2 24 21.2C28.7 21.2 32.5 24.2 33.5 29" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"></path>
+          <path class="loader-arc" d="M18.5 33.5C20.1 31.8 21.9 31 24 31C26.1 31 27.9 31.8 29.5 33.5" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"></path>
+          <circle class="loader-node" cx="16.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle class="loader-node" cx="31.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle class="loader-beacon" cx="24" cy="14.5" r="3.4" fill="var(--accent)"></circle>
+          <circle class="loader-beacon" cx="24" cy="26.5" r="2" fill="var(--accent)"></circle>
+        </svg>
+      </div>
+      <div class="loader-wordmark">
+        <span class="loader-title">BICIS</span>
+        <span class="loader-subtitle">Barangay Dimagiba · Legazpi City</span>
+      </div>
+      <div class="loader-bar-track" aria-hidden="true">
+        <span class="loader-bar-fill"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       NAVIGATION BAR
+       ====================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-link" aria-label="BICIS Home">
+        <svg class="brand-emblem" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 3.5L40.5 11.5V24.5C40.5 33.6 33.5 40.3 24 44.5C14.5 40.3 7.5 33.6 7.5 24.5V11.5L24 3.5Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M14.5 29C15.5 24.2 19.3 21.2 24 21.2C28.7 21.2 32.5 24.2 33.5 29" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+          <path d="M18.5 33.5C20.1 31.8 21.9 31 24 31C26.1 31 27.9 31.8 29.5 33.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          <circle cx="16.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="31.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="24" cy="14.5" r="3.4" fill="var(--accent)"></circle>
+          <circle cx="24" cy="26.5" r="2" fill="var(--accent)"></circle>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">BICIS</span>
+          <span class="brand-sub">Community Information System</span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html" class="nav-link is-active" aria-current="page">Home</a></li>
+          <li><a href="pages/about.html" class="nav-link">About BICIS</a></li>
+          <li><a href="pages/services.html" class="nav-link">Community Services</a></li>
+          <li><a href="pages/portal.html" class="nav-link">System Portal</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5"></circle>
+            <line x1="12" y1="2.5" x2="12" y2="5"></line>
+            <line x1="12" y1="19" x2="12" y2="21.5"></line>
+            <line x1="4.9" y1="4.9" x2="6.7" y2="6.7"></line>
+            <line x1="17.3" y1="17.3" x2="19.1" y2="19.1"></line>
+            <line x1="2.5" y1="12" x2="5" y2="12"></line>
+            <line x1="19" y1="12" x2="21.5" y2="12"></line>
+            <line x1="4.9" y1="19.1" x2="6.7" y2="17.3"></line>
+            <line x1="17.3" y1="6.7" x2="19.1" y2="4.9"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+
+        <a href="pages/login.html" class="btn btn-primary btn-sm nav-auth-desktop">Login / Register</a>
+
+        <button type="button" class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav aria-label="Mobile Navigation">
+      <ul class="mobile-nav-list">
+        <li><a href="index.html" class="is-active">Home <span>01</span></a></li>
+        <li><a href="pages/about.html">About BICIS <span>02</span></a></li>
+        <li><a href="pages/services.html">Community Services <span>03</span></a></li>
+        <li><a href="pages/portal.html">System Portal <span>04</span></a></li>
+        <li><a href="#contact">Contact <span>05</span></a></li>
+        <li><a href="pages/privacy.html">Privacy Notice <span>06</span></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-drawer-footer">
+      <a href="pages/login.html" class="btn btn-primary btn-block">Login to BICIS</a>
+      <a href="pages/register.html" class="btn btn-secondary btn-block">Create an Account</a>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MAIN CONTENT
+       ====================================================================== -->
+  <main id="main-content" class="page-main">
+
+    <!-- ====================================================================
+         SERVICE CAROUSEL — BICIS, DRRM, GAD, AND SOCIAL WELFARE
+         Positioned prominently near the top, above the main BICIS hero
+         ==================================================================== -->
+    <section id="service-carousel" class="service-carousel-section" aria-roledescription="carousel" aria-label="BICIS Core Community Services">
+      <div class="container carousel-shell">
+        <div class="carousel-header-bar">
+          <div class="eyebrow">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            <span>Core Community Information Pillars</span>
+          </div>
+          <div class="carousel-controls-top">
+            <span class="carousel-counter" aria-live="polite">
+              <strong data-carousel-current>01</strong> / <span data-carousel-total>04</span>
+            </span>
+            <button type="button" class="carousel-nav-btn" data-carousel-prev aria-label="Previous service slide">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button type="button" class="carousel-nav-btn" data-carousel-next aria-label="Next service slide">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="carousel-viewport">
+          <div class="carousel-track">
+            <!-- SLIDE 1 — BICIS -->
+            <article class="carousel-slide is-active" id="slide-bicis" role="tabpanel" aria-hidden="false">
+              <div class="carousel-slide-copy">
+                <span class="carousel-badge">
+                  <span class="carousel-badge-code">01 · BICIS</span>
+                  <span>Central Platform</span>
+                </span>
+                <h2 class="carousel-slide-title">Barangay Integrated Community Information System</h2>
+                <p class="carousel-slide-desc">
+                  Your central destination for accessible barangay information, essential services, community updates, and public resources.
+                </p>
+                <div class="carousel-slide-actions">
+                  <a href="pages/services.html#bicis" class="btn btn-primary btn-sm">
+                    <span>Explore BICIS</span>
+                    <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                  <a href="pages/about.html" class="btn btn-secondary btn-sm">About the System</a>
+                </div>
+              </div>
+              <div class="carousel-slide-visual" aria-hidden="true">
+                <svg class="carousel-artwork carousel-art-float" viewBox="0 0 240 150" fill="none">
+                  <rect x="20" y="18" width="200" height="114" stroke="var(--border-strong)" stroke-width="1.2"></rect>
+                  <line x1="20" y1="42" x2="220" y2="42" stroke="var(--border)" stroke-width="1"></line>
+                  <circle cx="34" cy="30" r="3" fill="var(--accent)"></circle>
+                  <circle cx="46" cy="30" r="3" fill="var(--border-strong)"></circle>
+                  <path d="M120 52L147 65V86C147 101 135 112 120 118C105 112 93 101 93 86V65L120 52Z" stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"></path>
+                  <path d="M105 93C107 85 113 80 120 80C127 80 133 85 135 93" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                  <circle cx="120" cy="69" r="4.5" fill="var(--accent)"></circle>
+                  <line x1="40" y1="74" x2="80" y2="74" stroke="var(--border-strong)" stroke-width="1.5"></line>
+                  <line x1="40" y1="86" x2="72" y2="86" stroke="var(--border)" stroke-width="1.5"></line>
+                  <line x1="160" y1="74" x2="200" y2="74" stroke="var(--border-strong)" stroke-width="1.5"></line>
+                  <line x1="168" y1="86" x2="200" y2="86" stroke="var(--border)" stroke-width="1.5"></line>
+                </svg>
+              </div>
+            </article>
+
+            <!-- SLIDE 2 — DRRM -->
+            <article class="carousel-slide" id="slide-drrm" role="tabpanel" aria-hidden="true">
+              <div class="carousel-slide-copy">
+                <span class="carousel-badge">
+                  <span class="carousel-badge-code">02 · DRRM</span>
+                  <span>Preparedness &amp; Safety</span>
+                </span>
+                <h2 class="carousel-slide-title">Disaster Risk Reduction and Management</h2>
+                <p class="carousel-slide-desc">
+                  Stay informed, prepared, and aware through disaster preparedness information, emergency announcements, safety guidelines, and community risk awareness.
+                </p>
+                <div class="carousel-slide-actions">
+                  <a href="pages/services.html#drrm" class="btn btn-primary btn-sm">
+                    <span>Explore DRRM</span>
+                    <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                  <a href="#community-map" class="btn btn-secondary btn-sm">View Community Map</a>
+                </div>
+              </div>
+              <div class="carousel-slide-visual" aria-hidden="true">
+                <svg class="carousel-artwork carousel-art-float" viewBox="0 0 240 150" fill="none">
+                  <circle cx="120" cy="75" r="56" stroke="var(--border)" stroke-width="1.2" stroke-dasharray="4 4"></circle>
+                  <circle cx="120" cy="75" r="38" stroke="var(--border-strong)" stroke-width="1.4"></circle>
+                  <circle cx="120" cy="75" r="20" stroke="var(--accent)" stroke-width="1.8"></circle>
+                  <line x1="48" y1="75" x2="192" y2="75" stroke="var(--border)" stroke-width="1"></line>
+                  <line x1="120" y1="15" x2="120" y2="135" stroke="var(--border)" stroke-width="1"></line>
+                  <path d="M120 42L142 86H98L120 42Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
+                  <line x1="120" y1="60" x2="120" y2="73" stroke="var(--accent)" stroke-width="2.4" stroke-linecap="round"></line>
+                  <circle cx="120" cy="80" r="2" fill="var(--accent)"></circle>
+                </svg>
+              </div>
+            </article>
+
+            <!-- SLIDE 3 — GAD -->
+            <article class="carousel-slide" id="slide-gad" role="tabpanel" aria-hidden="true">
+              <div class="carousel-slide-copy">
+                <span class="carousel-badge">
+                  <span class="carousel-badge-code">03 · GAD</span>
+                  <span>Equality &amp; Inclusion</span>
+                </span>
+                <h2 class="carousel-slide-title">Gender and Development</h2>
+                <p class="carousel-slide-desc">
+                  Promoting equality, inclusivity, awareness, and accessible information about gender-related programs and community initiatives.
+                </p>
+                <div class="carousel-slide-actions">
+                  <a href="pages/services.html#gad" class="btn btn-primary btn-sm">
+                    <span>Explore GAD</span>
+                    <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="carousel-slide-visual" aria-hidden="true">
+                <svg class="carousel-artwork carousel-art-float" viewBox="0 0 240 150" fill="none">
+                  <circle cx="96" cy="75" r="36" stroke="currentColor" stroke-width="2"></circle>
+                  <circle cx="144" cy="75" r="36" stroke="var(--accent)" stroke-width="2"></circle>
+                  <line x1="60" y1="124" x2="180" y2="124" stroke="var(--border-strong)" stroke-width="1.4"></line>
+                  <circle cx="120" cy="75" r="6" fill="var(--accent)"></circle>
+                  <circle cx="96" cy="75" r="3" fill="currentColor"></circle>
+                  <circle cx="144" cy="75" r="3" fill="currentColor"></circle>
+                </svg>
+              </div>
+            </article>
+
+            <!-- SLIDE 4 — SOCIAL WELFARE -->
+            <article class="carousel-slide" id="slide-welfare" role="tabpanel" aria-hidden="true">
+              <div class="carousel-slide-copy">
+                <span class="carousel-badge">
+                  <span class="carousel-badge-code">04 · SOCIAL WELFARE</span>
+                  <span>Resident Support</span>
+                </span>
+                <h2 class="carousel-slide-title">Social Welfare Services</h2>
+                <p class="carousel-slide-desc">
+                  Discover community assistance programs, social services, available support, and important information for residents and families.
+                </p>
+                <div class="carousel-slide-actions">
+                  <a href="pages/services.html#social-welfare" class="btn btn-primary btn-sm">
+                    <span>Explore Social Welfare</span>
+                    <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              <div class="carousel-slide-visual" aria-hidden="true">
+                <svg class="carousel-artwork carousel-art-float" viewBox="0 0 240 150" fill="none">
+                  <rect x="44" y="34" width="64" height="82" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+                  <rect x="132" y="34" width="64" height="82" stroke="var(--border-strong)" stroke-width="1.5"></rect>
+                  <path d="M84 96C88 76 102 66 120 66C138 66 152 76 156 96" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+                  <circle cx="120" cy="52" r="10" stroke="var(--accent)" stroke-width="2.2"></circle>
+                  <circle cx="88" cy="60" r="6" stroke="currentColor" stroke-width="1.8"></circle>
+                  <circle cx="152" cy="60" r="6" stroke="currentColor" stroke-width="1.8"></circle>
+                  <circle cx="120" cy="108" r="3.5" fill="var(--accent)"></circle>
+                </svg>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Slide Navigation Indicator Tabs -->
+        <div class="carousel-tabs" role="tablist" aria-label="Select community service pillar">
+          <button type="button" class="carousel-tab is-active" role="tab" aria-selected="true" aria-controls="slide-bicis">
+            <span class="carousel-tab-progress" aria-hidden="true"><span class="carousel-tab-progress-fill"></span></span>
+            <span class="carousel-tab-code">01 · SYSTEM</span>
+            <span class="carousel-tab-name">BICIS</span>
+          </button>
+          <button type="button" class="carousel-tab" role="tab" aria-selected="false" aria-controls="slide-drrm">
+            <span class="carousel-tab-progress" aria-hidden="true"><span class="carousel-tab-progress-fill"></span></span>
+            <span class="carousel-tab-code">02 · SAFETY</span>
+            <span class="carousel-tab-name">DRRM</span>
+          </button>
+          <button type="button" class="carousel-tab" role="tab" aria-selected="false" aria-controls="slide-gad">
+            <span class="carousel-tab-progress" aria-hidden="true"><span class="carousel-tab-progress-fill"></span></span>
+            <span class="carousel-tab-code">03 · EQUALITY</span>
+            <span class="carousel-tab-name">GAD</span>
+          </button>
+          <button type="button" class="carousel-tab" role="tab" aria-selected="false" aria-controls="slide-welfare">
+            <span class="carousel-tab-progress" aria-hidden="true"><span class="carousel-tab-progress-fill"></span></span>
+            <span class="carousel-tab-code">04 · ASSISTANCE</span>
+            <span class="carousel-tab-name">Social Welfare</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         HERO SECTION + INTERACTIVE BARANGAY DIMAGIBA MAP
+         ==================================================================== -->
+    <section class="hero-section" id="community-map" aria-label="BICIS Introduction and Interactive Community Map">
+      <div class="container">
+        <div class="hero-layout">
+          <!-- Left Editorial Column -->
+          <div class="hero-editorial">
+            <p class="eyebrow eyebrow--accent">
+              <span class="eyebrow-dot pulse-dot" aria-hidden="true"></span>
+              <span>BARANGAY INTEGRATED COMMUNITY INFORMATION SYSTEM</span>
+            </p>
+
+            <h1 class="hero-headline">
+              Keep You and Your Community <span class="accent-word">Safe</span>
+            </h1>
+
+            <p class="hero-description">
+              Building a safer, more informed, and connected community through accessible barangay services, social welfare programs, gender and development initiatives, and disaster preparedness information.
+            </p>
+
+            <div class="hero-cta-group">
+              <a href="pages/services.html" class="btn btn-primary">
+                <span>Explore Services</span>
+                <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+              <a href="pages/login.html" class="btn btn-secondary">Login / Register</a>
+            </div>
+
+            <div class="hero-meta-strip">
+              <div class="hero-meta-item">
+                <span class="hero-meta-label">Community Focus</span>
+                <span class="hero-meta-value">Barangay Dimagiba</span>
+              </div>
+              <div class="hero-meta-item">
+                <span class="hero-meta-label">City &amp; Province</span>
+                <span class="hero-meta-value">Legazpi City, Albay</span>
+              </div>
+              <div class="hero-meta-item">
+                <span class="hero-meta-label">Core Programs</span>
+                <span class="hero-meta-value">DRRM · GAD · Welfare</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Interactive Map Column -->
+          <div class="hero-map-column">
+            <div
+              id="bicis-map-wrapper"
+              class="map-wrapper"
+              tabindex="0"
+              role="region"
+              aria-label="Interactive illustrated community map centered on Barangay Dimagiba, Legazpi City, Albay, Philippines"
+            >
+              <!-- Top Overlay Bar -->
+              <div class="map-top-bar">
+                <div class="map-badge-pill">
+                  <span class="eyebrow-dot" aria-hidden="true"></span>
+                  <span><strong>Illustrative Map</strong> · Not Live GPS</span>
+                </div>
+
+                <!-- Dedicated Zoom, Reset, Fullscreen Controls -->
+                <div class="map-controls" aria-label="Map navigation controls">
+                  <div class="map-control-group">
+                    <button type="button" id="map-zoom-in" class="map-ctrl-btn" aria-label="Zoom in" title="Zoom In (+)">+</button>
+                    <button type="button" id="map-zoom-out" class="map-ctrl-btn" aria-label="Zoom out" title="Zoom Out (−)">&minus;</button>
+                  </div>
+                  <div class="map-control-group">
+                    <button type="button" id="map-reset" class="map-ctrl-btn" aria-label="Reset view to Barangay Dimagiba" title="Reset View (0)">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M3 12a9 9 0 1 0 3-6.7L3 8"></path>
+                        <polyline points="3 3 3 8 8 8"></polyline>
+                      </svg>
+                    </button>
+                    <button type="button" id="map-fullscreen" class="map-ctrl-btn" aria-label="Toggle fullscreen map" aria-pressed="false" title="Fullscreen Map">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <polyline points="9 21 3 21 3 15"></polyline>
+                        <line x1="21" y1="3" x2="14" y2="10"></line>
+                        <line x1="3" y1="21" x2="10" y2="14"></line>
+                      </svg>
+                    </button>
+                  </div>
+                  <div id="map-zoom-readout" class="map-zoom-readout" aria-live="polite">100%</div>
+                </div>
+              </div>
+
+              <!-- Transformable SVG Map Stage -->
+              <div id="bicis-map-stage" class="map-stage">
+                <svg
+                  id="bicis-map-svg"
+                  class="bicis-map-svg"
+                  viewBox="0 0 840 620"
+                  xmlns="http://www.w3.org/2000/svg"
+                  role="img"
+                  aria-label="Illustrated map centered on Barangay Dimagiba, Legazpi City, Albay"
+                >
+                  <!-- Layer 1: Subtle Topographic Contours & Coastal Regional Context -->
+                  <g id="map-terrain">
+                    <ellipse class="map-contour" cx="420" cy="310" rx="340" ry="240"></ellipse>
+                    <ellipse class="map-contour" cx="420" cy="310" rx="255" ry="178"></ellipse>
+                    <ellipse class="map-contour" cx="420" cy="310" rx="168" ry="118"></ellipse>
+                    <path class="map-contour" d="M40 120 Q230 160 410 100 T810 140"></path>
+                    <path class="map-contour" d="M20 510 Q240 465 440 520 T820 475"></path>
+
+                    <!-- Stylized Eastern Coastal Context (Toward Albay Gulf) -->
+                    <path
+                      class="map-gulf-water"
+                      data-feature-id="zone-gulf"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Toward Albay Gulf — Legazpi City Coastal Context"
+                      d="M735 0 C705 120 745 225 718 345 C695 445 730 535 702 620 L840 620 L840 0 Z"
+                    ></path>
+                    <text class="map-label-region" x="778" y="312" text-anchor="middle" transform="rotate(-90 778 312)">TOWARD ALBAY GULF (EAST)</text>
+                    <text class="map-label-region" x="150" y="54">LEGAZPI CITY · ALBAY (REGION V)</text>
+                  </g>
+
+                  <!-- Layer 2: Illustrative Community Sectors / Zones -->
+                  <g id="map-zones">
+                    <circle class="map-boundary-halo" cx="415" cy="308" r="142"></circle>
+
+                    <polygon
+                      class="map-zone"
+                      data-feature-id="zone-civic"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Civic and Public Service Core (Illustrative)"
+                      points="335,248 492,248 510,362 325,362"
+                    ></polygon>
+
+                    <polygon
+                      class="map-zone"
+                      data-feature-id="zone-north"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Northern Community Cluster (Illustrative)"
+                      points="265,128 538,128 520,218 282,218"
+                    ></polygon>
+
+                    <polygon
+                      class="map-zone"
+                      data-feature-id="zone-south"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Southern Community Cluster (Illustrative)"
+                      points="250,392 548,392 528,488 268,488"
+                    ></polygon>
+
+                    <text class="map-label-detail" x="398" y="156">NORTH CLUSTER (ILLUSTRATIVE)</text>
+                    <text class="map-label-detail" x="394" y="472">SOUTH CLUSTER (ILLUSTRATIVE)</text>
+                    <text class="map-label-detail" x="348" y="349">CIVIC CORE (ILLUSTRATIVE)</text>
+                  </g>
+
+                  <!-- Layer 3: Illustrative Road Network -->
+                  <g id="map-roads">
+                    <!-- Subtle Road Casings -->
+                    <path class="map-road-casing" d="M68 312 Q255 292 415 308 T712 288"></path>
+                    <path class="map-road-casing" d="M415 58 Q428 190 415 308 T402 562"></path>
+
+                    <!-- Secondary Illustrative Roads -->
+                    <path
+                      class="map-road-secondary"
+                      data-feature-id="road-loop"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Community Inner Service Loop (Illustrative)"
+                      d="M278 232 L548 232 L566 376 L262 376 Z"
+                    ></path>
+                    <path
+                      class="map-road-secondary"
+                      data-feature-id="road-south"
+                      tabindex="0"
+                      role="button"
+                      aria-label="South Preparedness Lane (Illustrative)"
+                      d="M170 448 Q330 436 458 446 T672 418"
+                    ></path>
+                    <path
+                      class="map-road-secondary"
+                      data-feature-id="road-east"
+                      tabindex="0"
+                      role="button"
+                      aria-label="East Coastal Connector (Illustrative)"
+                      d="M548 232 Q625 224 708 194"
+                    ></path>
+
+                    <!-- Primary Illustrative Roads -->
+                    <path
+                      class="map-road-primary"
+                      data-feature-id="road-main"
+                      tabindex="0"
+                      role="button"
+                      aria-label="Central Barangay Thoroughfare (Illustrative)"
+                      d="M68 312 Q255 292 415 308 T712 288"
+                    ></path>
+                    <path
+                      class="map-road-primary"
+                      data-feature-id="road-north"
+                      tabindex="0"
+                      role="button"
+                      aria-label="North Civic Access Corridor (Illustrative)"
+                      d="M415 58 Q428 190 415 308 T402 562"
+                    ></path>
+
+                    <!-- Progressive Zoom Road Labels -->
+                    <text class="map-label-road" x="148" y="294">CENTRAL THOROUGHFARE (ILLUS.)</text>
+                    <text class="map-label-road" x="430" y="106">NORTH ACCESS CORRIDOR</text>
+                    <text class="map-label-road" x="572" y="205">EAST CONNECTOR</text>
+                    <text class="map-label-road" x="488" y="438">SOUTH PREPAREDNESS LANE</text>
+                  </g>
+
+                  <!-- Layer 4: Interactive Community Markers -->
+                  <g id="map-markers">
+                    <!-- DRRM Evacuation Assembly Zone -->
+                    <g class="map-marker" data-feature-id="hub-drrm" tabindex="0" role="button" aria-label="DRRM Evacuation Assembly Zone (Illustrative)">
+                      <circle class="map-marker-hit" cx="310" cy="178" r="22"></circle>
+                      <circle class="map-marker-outer" cx="310" cy="178" r="9"></circle>
+                      <circle class="map-marker-core" cx="310" cy="178" r="3.5"></circle>
+                      <text class="map-marker-label" x="325" y="181">DRRM Zone</text>
+                    </g>
+
+                    <!-- Barangay Hall & BICIS Hub -->
+                    <g class="map-marker" data-feature-id="hub-bicis" tabindex="0" role="button" aria-label="Barangay Hall and BICIS Hub (Illustrative)">
+                      <circle class="map-marker-hit" cx="485" cy="264" r="22"></circle>
+                      <circle class="map-marker-outer" cx="485" cy="264" r="9"></circle>
+                      <circle class="map-marker-core" cx="485" cy="264" r="3.5"></circle>
+                      <text class="map-marker-label" x="500" y="267">BICIS Hub</text>
+                    </g>
+
+                    <!-- GAD Resource & Safe Space Desk -->
+                    <g class="map-marker" data-feature-id="hub-gad" tabindex="0" role="button" aria-label="GAD Resource and Safe Space Desk (Illustrative)">
+                      <circle class="map-marker-hit" cx="322" cy="296" r="22"></circle>
+                      <circle class="map-marker-outer" cx="322" cy="296" r="9"></circle>
+                      <circle class="map-marker-core" cx="322" cy="296" r="3.5"></circle>
+                      <text class="map-marker-label" x="242" y="286">GAD Desk</text>
+                    </g>
+
+                    <!-- Social Welfare Assistance Center -->
+                    <g class="map-marker" data-feature-id="hub-welfare" tabindex="0" role="button" aria-label="Social Welfare Assistance Center (Illustrative)">
+                      <circle class="map-marker-hit" cx="515" cy="368" r="22"></circle>
+                      <circle class="map-marker-outer" cx="515" cy="368" r="9"></circle>
+                      <circle class="map-marker-core" cx="515" cy="368" r="3.5"></circle>
+                      <text class="map-marker-label" x="530" y="371">Social Welfare</text>
+                    </g>
+
+                    <!-- Community Health & First Aid Post -->
+                    <g class="map-marker" data-feature-id="hub-health" tabindex="0" role="button" aria-label="Community Health and First Aid Post (Illustrative)">
+                      <circle class="map-marker-hit" cx="292" cy="436" r="22"></circle>
+                      <circle class="map-marker-outer" cx="292" cy="436" r="8"></circle>
+                      <circle class="map-marker-core" cx="292" cy="436" r="3"></circle>
+                      <text class="map-marker-label" x="307" y="439">Health Post</text>
+                    </g>
+
+                    <!-- Multi-Purpose Covered Court -->
+                    <g class="map-marker" data-feature-id="hub-court" tabindex="0" role="button" aria-label="Multi-Purpose Covered Court (Illustrative)">
+                      <circle class="map-marker-hit" cx="566" cy="442" r="22"></circle>
+                      <circle class="map-marker-outer" cx="566" cy="442" r="8"></circle>
+                      <circle class="map-marker-core" cx="566" cy="442" r="3"></circle>
+                      <text class="map-marker-label" x="581" y="445">Covered Court</text>
+                    </g>
+
+                    <!-- PRIMARY EMPHASIZED MARKER: BARANGAY DIMAGIBA CENTER -->
+                    <g class="map-marker map-marker--primary" data-feature-id="dimagiba-center" tabindex="0" role="button" aria-label="Barangay Dimagiba, Legazpi City, Albay">
+                      <circle class="map-pulse-ring" cx="415" cy="308" r="14"></circle>
+                      <circle class="map-marker-hit" cx="415" cy="308" r="28"></circle>
+                      <circle class="map-marker-outer" cx="415" cy="308" r="13"></circle>
+                      <circle class="map-marker-core" cx="415" cy="308" r="4.8"></circle>
+                      <text class="map-marker-label" x="415" y="335" text-anchor="middle" style="font-size: 11px; letter-spacing: 0.08em;">BARANGAY DIMAGIBA</text>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+
+              <!-- MDX-Inspired Cursor-Following Tooltip -->
+              <div id="map-cursor-tooltip" class="map-cursor-tooltip" role="tooltip" aria-hidden="true">
+                <div id="tooltip-category" class="tooltip-category">Location</div>
+                <div id="tooltip-title" class="tooltip-title">Barangay Dimagiba</div>
+                <div id="tooltip-meta" class="tooltip-meta">Legazpi City, Albay, Philippines</div>
+              </div>
+
+              <!-- Floating Location Information Card -->
+              <div class="map-location-card" aria-live="polite">
+                <div class="location-card-status">
+                  <span class="location-indicator-dot pulse-dot" aria-hidden="true"></span>
+                  <span id="location-card-status-text">Active Community Focus</span>
+                </div>
+                <div id="location-card-title" class="location-card-title">BARANGAY DIMAGIBA</div>
+                <div id="location-card-sub" class="location-card-sub">Legazpi City, Albay, Philippines</div>
+              </div>
+
+              <!-- Subtle Desktop Interaction Hint -->
+              <div class="map-interaction-hint" aria-hidden="true">
+                Hover features to inspect · Click to view details · Drag to pan
+              </div>
+
+              <!-- Dismissible Selected Location Detail Panel -->
+              <aside id="map-detail-panel" class="map-detail-panel" aria-hidden="true" aria-label="Selected map location details">
+                <div class="map-detail-header">
+                  <span id="map-detail-tag" class="map-detail-tag">Community Focus</span>
+                  <button type="button" id="map-detail-close" class="map-detail-close" aria-label="Close location details">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+                <h3 id="map-detail-title" class="map-detail-title">Barangay Dimagiba</h3>
+                <p id="map-detail-desc" class="map-detail-desc"></p>
+                <p id="map-detail-disclaimer" class="map-detail-disclaimer"></p>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         COMMUNITY SERVICE PILLARS OVERVIEW
+         ==================================================================== -->
+    <section class="editorial-section" aria-labelledby="services-overview-heading">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <div class="section-header-copy">
+            <span class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              <span>Community Services Directory</span>
+            </span>
+            <h2 id="services-overview-heading" class="section-title">One Portal for Essential Barangay Information</h2>
+          </div>
+          <p class="section-lead">
+            BICIS organizes public resources across four focused pillars so residents and families can locate verified guidance quickly without clutter.
+          </p>
+        </div>
+
+        <div class="pillars-grid">
+          <article class="pillar-card" data-reveal>
+            <div>
+              <div class="pillar-card-top">
+                <span class="pillar-index">01 · PLATFORM</span>
+                <span class="pillar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L20 6V12C20 17 16.4 20.8 12 22C7.6 20.8 4 17 4 12V6L12 2Z"></path>
+                    <circle cx="12" cy="11" r="2.5"></circle>
+                  </svg>
+                </span>
+              </div>
+              <h3 class="pillar-title" style="margin-top: 1.25rem;">BICIS</h3>
+              <p class="pillar-desc">
+                Central access to barangay updates, public advisories, community records guidance, and resident service portals.
+              </p>
+            </div>
+            <a href="pages/services.html#bicis" class="pillar-link">
+              <span>Explore BICIS</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </article>
+
+          <article class="pillar-card" data-reveal data-reveal-delay="1">
+            <div>
+              <div class="pillar-card-top">
+                <span class="pillar-index">02 · PREPAREDNESS</span>
+                <span class="pillar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <circle cx="12" cy="17" r="0.6" fill="currentColor"></circle>
+                  </svg>
+                </span>
+              </div>
+              <h3 class="pillar-title" style="margin-top: 1.25rem;">DRRM</h3>
+              <p class="pillar-desc">
+                Disaster Risk Reduction and Management — preparedness checklists, emergency notices, safety guidelines, and risk awareness.
+              </p>
+            </div>
+            <a href="pages/services.html#drrm" class="pillar-link">
+              <span>Explore DRRM</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </article>
+
+          <article class="pillar-card" data-reveal data-reveal-delay="2">
+            <div>
+              <div class="pillar-card-top">
+                <span class="pillar-index">03 · INCLUSIVITY</span>
+                <span class="pillar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="9" cy="12" r="5"></circle>
+                    <circle cx="15" cy="12" r="5"></circle>
+                  </svg>
+                </span>
+              </div>
+              <h3 class="pillar-title" style="margin-top: 1.25rem;">GAD</h3>
+              <p class="pillar-desc">
+                Gender and Development — equality initiatives, inclusive community awareness, and accessible gender-related program information.
+              </p>
+            </div>
+            <a href="pages/services.html#gad" class="pillar-link">
+              <span>Explore GAD</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </article>
+
+          <article class="pillar-card" data-reveal data-reveal-delay="3">
+            <div>
+              <div class="pillar-card-top">
+                <span class="pillar-index">04 · SUPPORT</span>
+                <span class="pillar-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="10" cy="7" r="4"></circle>
+                    <path d="M21 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </span>
+              </div>
+              <h3 class="pillar-title" style="margin-top: 1.25rem;">Social Welfare</h3>
+              <p class="pillar-desc">
+                Social Welfare Services — community assistance programs, family support directories, and essential resident aid guidance.
+              </p>
+            </div>
+            <a href="pages/services.html#social-welfare" class="pillar-link">
+              <span>Explore Welfare</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         PRIVACY TRANSPARENCY & RESIDENT ACCESS SECTION
+         ==================================================================== -->
+    <section class="editorial-section editorial-section--alt" aria-labelledby="trust-heading">
+      <div class="container">
+        <div class="split-grid">
+          <div data-reveal>
+            <span class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              <span>Responsible Public Information</span>
+            </span>
+            <h2 id="trust-heading" class="section-title" style="margin-top: 0.9rem; margin-bottom: 1.15rem;">
+              Designed for Clarity, Privacy, and Everyday Residents
+            </h2>
+            <p class="section-lead" style="margin-bottom: 1.75rem;">
+              Residents should always understand how their account details are handled. BICIS aligns its privacy notice with the Philippine Data Privacy Act of 2012 (Republic Act No. 10173).
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.85rem;">
+              <a href="pages/register.html" class="btn btn-primary">Create Resident Account</a>
+              <a href="pages/privacy.html" class="btn btn-secondary">Read Full Privacy Policy</a>
+            </div>
+          </div>
+
+          <div data-reveal data-reveal-delay="1" style="display: flex; flex-direction: column; gap: 1.25rem;">
+            <!-- Privacy Notice Card (Opens Privacy Modal) -->
+            <button type="button" class="privacy-notice-card" data-modal-open="privacy-modal">
+              <span class="privacy-notice-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"></path>
+                  <line x1="9" y1="7" x2="16" y2="7"></line>
+                  <line x1="9" y1="11" x2="14" y2="11"></line>
+                </svg>
+              </span>
+              <span>
+                <span class="privacy-notice-tag">PRIVACY NOTICE</span>
+                <span class="privacy-notice-title">Your information, handled responsibly.</span>
+                <span class="privacy-notice-desc">
+                  Learn how BICIS collects, uses, and protects your personal information when you create and access your account.
+                </span>
+              </span>
+              <span class="privacy-notice-arrow" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </span>
+            </button>
+
+            <div class="info-list">
+              <div class="info-list-row">
+                <span class="info-list-label">Legal Alignment</span>
+                <span class="info-list-value">Philippine Data Privacy Act of 2012 (RA 10173)</span>
+              </div>
+              <div class="info-list-row">
+                <span class="info-list-label">Email Purpose</span>
+                <span class="info-list-value">Registration, sign-in, verification, password recovery, and essential account notices only</span>
+              </div>
+              <div class="info-list-row">
+                <span class="info-list-label">Consent Policy</span>
+                <span class="info-list-value">Explicit, unchecked user review required prior to registration</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CONTACT & COMMUNITY DESK SECTION
+         ==================================================================== -->
+    <section id="contact" class="editorial-section" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="split-grid">
+          <div data-reveal>
+            <span class="eyebrow">
+              <span class="eyebrow-dot" aria-hidden="true"></span>
+              <span>Community Desk</span>
+            </span>
+            <h2 id="contact-heading" class="section-title" style="margin-top: 0.9rem; margin-bottom: 1.15rem;">
+              Connect With Barangay Dimagiba
+            </h2>
+            <p class="section-lead" style="margin-bottom: 2rem;">
+              Have a question about BICIS services, DRRM preparedness notices, GAD initiatives, Social Welfare assistance, or data privacy? Reach out to the barangay system administrator.
+            </p>
+
+            <div class="info-list">
+              <div class="info-list-row">
+                <span class="info-list-label">Community</span>
+                <span class="info-list-value">Barangay Dimagiba, Legazpi City, Albay 4500, Philippines</span>
+              </div>
+              <div class="info-list-row">
+                <span class="info-list-label">System Scope</span>
+                <span class="info-list-value">BICIS · DRRM · GAD · Social Welfare</span>
+              </div>
+              <div class="info-list-row">
+                <span class="info-list-label">Privacy Desk</span>
+                <span class="info-list-value">Designated BICIS Administrator (configured upon barangay deployment)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="editorial-panel" data-reveal data-reveal-delay="1">
+            <form id="bicis-contact-form" class="form-stack" action="api/contact.php" method="POST" novalidate>
+              <div>
+                <span class="eyebrow eyebrow--accent">Resident Inquiry Form</span>
+                <h3 class="serif-heading" style="font-size: 1.55rem; margin-top: 0.4rem;">Send a Message</h3>
+              </div>
+
+              <div id="contact-form-banner" class="form-banner" role="alert"></div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact-name">Full Name</label>
+                <input type="text" id="contact-name" name="name" class="form-input" placeholder="Juan Dela Cruz" autocomplete="name" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact-email">Email Address</label>
+                <input type="email" id="contact-email" name="email" class="form-input" placeholder="resident@example.com" autocomplete="email" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact-topic">Program Category</label>
+                <select id="contact-topic" name="topic" class="form-select">
+                  <option value="BICIS General Information">BICIS — General Community Information</option>
+                  <option value="DRRM Preparedness">DRRM — Disaster Risk Reduction &amp; Management</option>
+                  <option value="GAD Programs">GAD — Gender and Development</option>
+                  <option value="Social Welfare Services">Social Welfare Services</option>
+                  <option value="Privacy Inquiry">Data Privacy &amp; Account Assistance</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="contact-message">Message</label>
+                <textarea id="contact-message" name="message" class="form-textarea" placeholder="Write your inquiry or concern..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block">
+                <span>Submit Inquiry</span>
+                <svg class="icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================================
+       FOOTER
+       ====================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <a href="index.html" class="brand-link" aria-label="BICIS Home">
+            <svg class="brand-emblem" viewBox="0 0 48 48" aria-hidden="true">
+              <path d="M24 3.5L40.5 11.5V24.5C40.5 33.6 33.5 40.3 24 44.5C14.5 40.3 7.5 33.6 7.5 24.5V11.5L24 3.5Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+              <path d="M14.5 29C15.5 24.2 19.3 21.2 24 21.2C28.7 21.2 32.5 24.2 33.5 29" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+              <path d="M18.5 33.5C20.1 31.8 21.9 31 24 31C26.1 31 27.9 31.8 29.5 33.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+              <circle cx="16.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+              <circle cx="31.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+              <circle cx="24" cy="14.5" r="3.4" fill="var(--accent)"></circle>
+              <circle cx="24" cy="26.5" r="2" fill="var(--accent)"></circle>
+            </svg>
+            <span class="brand-text">
+              <span class="brand-name">BICIS</span>
+              <span class="brand-sub">Barangay Integrated Community Information System</span>
+            </span>
+          </a>
+          <p style="margin-top: 1rem; font-size: 0.88rem; color: var(--text-secondary); max-width: 40ch;">
+            Serving residents of Barangay Dimagiba, Legazpi City, Albay, Philippines with accessible community information, preparedness resources, and public service guidance.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Navigation</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="pages/about.html">About BICIS</a></li>
+            <li><a href="pages/services.html">Community Services</a></li>
+            <li><a href="#contact">Contact Desk</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Core Programs</h3>
+          <ul class="footer-links">
+            <li><a href="pages/services.html#bicis">BICIS Platform</a></li>
+            <li><a href="pages/services.html#drrm">DRRM Preparedness</a></li>
+            <li><a href="pages/services.html#gad">GAD Initiatives</a></li>
+            <li><a href="pages/services.html#social-welfare">Social Welfare Services</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footer-col-title">Resident Access</h3>
+          <ul class="footer-links">
+            <li><a href="pages/login.html">Login</a></li>
+            <li><a href="pages/register.html">Register Account</a></li>
+            <li><button type="button" data-modal-open="privacy-modal">Privacy Notice (Quick View)</button></li>
+            <li><a href="pages/privacy.html">Privacy Terms &amp; Agreement</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>&copy; Barangay Integrated Community Information System (BICIS) — Barangay Dimagiba, Legazpi City, Albay.</span>
+        <span>Built with HTML5, CSS3 &amp; Vanilla JavaScript · XAMPP Ready</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================
+       PRIVACY TERMS & AGREEMENT MODAL (RA 10173 ALIGNED)
+       ====================================================================== -->
+  <div id="privacy-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow eyebrow--accent">Privacy Terms &amp; Agreement</span>
+          <h2 id="privacy-modal-title" class="modal-title">Your Information, Handled Responsibly</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close privacy notice">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          This Privacy Terms and Agreement outlines how the <strong>Barangay Integrated Community Information System (BICIS)</strong> handles personal information in accordance with the <strong>Philippine Data Privacy Act of 2012 (Republic Act No. 10173)</strong> and its Implementing Rules and Regulations.
+        </p>
+
+        <div class="privacy-clause">
+          <h3>1. Why BICIS Requires an Email Address</h3>
+          <p>
+            When registering for a resident account, BICIS requests a valid email address as a unique account identifier and direct communication channel for account security and essential system updates.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>2. Registration and Login</h3>
+          <p>
+            Your email address is used to register your account profile and authenticate your sign-in requests when connected to the barangay's authorized server backend.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>3. Account Verification</h3>
+          <p>
+            When enabled by the system administrators, your email address may be used to verify account ownership and reduce unauthorized or duplicate registrations.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>4. Password Recovery</h3>
+          <p>
+            If you forget your password, your registered email address may be used to send password-reset instructions or verification links so you can securely regain access to your account.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>5. Essential Account-Related Notifications</h3>
+          <p>
+            BICIS may use your email address strictly for essential account-related notices (such as security alerts, verification updates, or requested service status notices). Email addresses are not used for unrelated marketing or commercial purposes without an appropriate legal basis and transparent user consent.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>6. Storage and Protection of Personal Information</h3>
+          <p>
+            Personal data submitted through a deployed BICIS backend should be stored with appropriate administrative, physical, and technical safeguards (such as encrypted transport and hashed passwords). This frontend interface never stores real passwords in browser localStorage. Actual server-side retention and security controls are maintained by the designated Barangay Dimagiba system administrators.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>7. Requesting Assistance Regarding Your Information</h3>
+          <p>
+            Under RA 10173, data subjects have rights to be informed, access, object, rectify inaccurate records, or request deletion/blocking of personal information subject to applicable law and official barangay record-keeping rules.
+          </p>
+        </div>
+
+        <div class="privacy-clause">
+          <h3>8. Contacting the BICIS Administrator</h3>
+          <p>
+            For questions, correction requests, or privacy concerns, please contact the designated BICIS Administrator or Barangay Data Protection Officer at the Barangay Dimagiba Hall, Legazpi City, Albay, or through the official administrator contact channels published upon live system deployment.
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <a href="pages/privacy.html" class="inline-action-link">Open Full Privacy Page</a>
+        <button type="button" class="btn btn-primary btn-sm" data-modal-close>Close Notice</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts (Pure Vanilla JavaScript) -->
+  <script src="js/theme.js"></script>
+  <script src="js/carousel.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>

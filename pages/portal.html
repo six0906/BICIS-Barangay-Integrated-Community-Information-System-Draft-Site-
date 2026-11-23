@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BICIS Unified Community Portal — Resident Registry, GAD-CARE, GABAY, and HANDA+ for Barangay Dimagiba, Legazpi City, Albay.">
+  <title>Unified Portal — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/portal.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="portal-body">
+  <div class="portal-shell">
+    <!-- Collapsible Unified Sidebar (populated by portal-shell.js) -->
+    <aside id="portal-sidebar" class="portal-sidebar" aria-label="BICIS Portal Navigation"></aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <!-- Main Workspace -->
+    <div class="portal-workspace">
+      <header class="portal-topbar">
+        <div class="portal-topbar-left">
+          <button type="button" id="sidebar-mobile-trigger" class="sidebar-mobile-trigger" aria-label="Open portal sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="portal-breadcrumb">
+            <span class="portal-breadcrumb-module">BICIS Unified Platform</span>
+            <span id="portal-breadcrumb-page" class="portal-breadcrumb-page">Dashboard</span>
+          </div>
+        </div>
+
+        <div class="portal-topbar-right">
+          <div class="role-switcher-wrap" title="Proposed role preview — production permissions must be enforced on the PHP backend">
+            <span class="role-switcher-label">Role Preview</span>
+            <select id="portal-role-select" class="role-switcher-select" aria-label="Switch proposed preview role"></select>
+          </div>
+
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5"></circle>
+              <line x1="12" y1="2.5" x2="12" y2="5"></line>
+              <line x1="12" y1="19" x2="12" y2="21.5"></line>
+              <line x1="4.9" y1="4.9" x2="6.7" y2="6.7"></line>
+              <line x1="17.3" y1="17.3" x2="19.1" y2="19.1"></line>
+              <line x1="2.5" y1="12" x2="5" y2="12"></line>
+              <line x1="19" y1="12" x2="21.5" y2="12"></line>
+              <line x1="4.9" y1="19.1" x2="6.7" y2="17.3"></line>
+              <line x1="17.3" y1="6.7" x2="19.1" y2="4.9"></line>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sample Data & Backend Transparency Banner -->
+      <div class="sample-data-strip">
+        <span><strong>Preview Notice:</strong> Showing sample records for Barangay Dimagiba, Legazpi City, Albay. Connect PHP &amp; <code>database/bicis_schema.sql</code> for live saving.</span>
+      </div>
+
+      <main class="portal-content">
+        <!-- VIEW 1: UNIFIED DASHBOARD -->
+        <section id="view-dashboard" class="portal-view is-active" aria-labelledby="portal-dash-heading">
+          <div class="module-header">
+            <div>
+              <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Barangay Dimagiba · Community Portal</span></span>
+              <h1 id="portal-dash-heading" class="module-header-title">Welcome to BICIS</h1>
+              <p id="portal-dash-subtitle" class="module-header-desc">
+                One shared Resident Registry supporting GAD-CARE, GABAY, and HANDA+ services.
+              </p>
+            </div>
+            <div class="module-actions" id="portal-quick-actions"></div>
+          </div>
+
+          <!-- Dynamic Container rendered based on Role (Staff vs Resident Phase 1 Read-Only) -->
+          <div id="portal-dashboard-body" style="display:flex;flex-direction:column;gap:1.5rem;"></div>
+        </section>
+
+        <!-- VIEW 2: SYSTEM OVERVIEW -->
+        <section id="view-overview" class="portal-view" aria-labelledby="portal-overview-heading">
+          <div class="module-header">
+            <div>
+              <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Simple System Guide</span></span>
+              <h1 id="portal-overview-heading" class="module-header-title">How BICIS Works Together</h1>
+              <p class="module-header-desc">
+                All four modules share one Resident Registry so staff never have to enter the same household twice.
+              </p>
+            </div>
+          </div>
+
+          <div class="portal-grid-2">
+            <article class="portal-card">
+              <div class="portal-card-header">
+                <h2 class="portal-card-title">1. Resident Registry</h2>
+                <span class="badge badge--accent">Central Records</span>
+              </div>
+              <div class="portal-card-body">
+                <p style="color:var(--portal-text-muted);margin-bottom:1.1rem;">
+                  Register and update Household, Family, and Resident records in one place, including puroks, ages, and sector tags (Senior Citizen, PWD, 4Ps, Solo Parent, Pregnant, Lactating, Infant).
+                </p>
+                <a href="registry.html" class="btn btn-primary btn-sm">Open Resident Registry</a>
+              </div>
+            </article>
+
+            <article class="portal-card">
+              <div class="portal-card-header">
+                <h2 class="portal-card-title">2. GAD-CARE</h2>
+                <span class="badge">Women &amp; Family Care</span>
+              </div>
+              <div class="portal-card-body">
+                <p style="color:var(--portal-text-muted);margin-bottom:1.1rem;">
+                  Tag eligible residents from the Registry, track needs assessments, manage maternity and hygiene supplies, and release kits without duplicate claims or negative stock.
+                </p>
+                <a href="gad-care.html#dashboard" class="btn btn-secondary btn-sm">Open GAD-CARE</a>
+              </div>
+            </article>
+
+            <article class="portal-card">
+              <div class="portal-card-header">
+                <h2 class="portal-card-title">3. GABAY</h2>
+                <span class="badge">Social Welfare Aid</span>
+              </div>
+              <div class="portal-card-body">
+                <p style="color:var(--portal-text-muted);margin-bottom:1.1rem;">
+                  Enroll Registry households into barangay programs, review urgent medical and burial requests first, prevent duplicate aid releases, and print Certificates of Indigency.
+                </p>
+                <a href="gabay.html#dashboard" class="btn btn-secondary btn-sm">Open GABAY</a>
+              </div>
+            </article>
+
+            <article class="portal-card">
+              <div class="portal-card-header">
+                <h2 class="portal-card-title">4. HANDA+</h2>
+                <span class="badge">Disaster Readiness</span>
+              </div>
+              <div class="portal-card-body">
+                <p style="color:var(--portal-text-muted);margin-bottom:1.1rem;">
+                  Prepare Priority Rescue Lists using shared barangay records, record evacuation check-ins, prevent duplicate relief claims, and share public safety alerts with residents.
+                </p>
+                <a href="handa-plus.html#dashboard" class="btn btn-secondary btn-sm">Open HANDA+</a>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/bicis-store.js"></script>
+  <script src="../js/portal-shell.js"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      function renderDashboard() {
+        const store = window.BICIS_STORE;
+        const esc = store.escapeHtml;
+        const role = store.getCurrentRole();
+        const heading = document.getElementById("portal-dash-heading");
+        const container = document.getElementById("portal-dashboard-body");
+        const actions = document.getElementById("portal-quick-actions");
+        const subtitle = document.getElementById("portal-dash-subtitle");
+
+        // Resident Phase 1 Read-Only View — Calm, Clear, Public Info Only
+        if (role.permissions.residentOnly) {
+          heading.textContent = "Welcome, Barangay Dimagiba Resident";
+          subtitle.textContent =
+            "View the latest barangay alert level, official advisories, announcements, and open evacuation centers.";
+          actions.innerHTML =
+            '<a href="handa-plus.html#centers" class="btn btn-primary btn-sm">View Evacuation Centers</a>' +
+            '<a href="handa-plus.html#map" class="btn btn-secondary btn-sm">Open Safety Map</a>';
+
+          const st = store.state;
+          const centersHtml = st.handaCenters
+            .map(function (c) {
+              const occ = c.checkedInResidentIds.length;
+              const badge = c.status === "Open" ? "badge--success" : "badge--warning";
+              return (
+                "<tr>" +
+                "<td><strong>" + esc(c.name) + "</strong><div style='font-size:0.84rem;color:var(--portal-text-muted);'>" + esc(c.address) + "</div></td>" +
+                "<td><span class='badge " + badge + "'>" + esc(c.status) + "</span></td>" +
+                "<td>" + occ + " of " + c.capacity + "</td>" +
+                "<td>" + esc(c.contact) + "</td>" +
+                "</tr>"
+              );
+            })
+            .join("");
+
+          const advHtml = st.handaAlerts.advisories
+            .map(function (a) {
+              return (
+                '<div class="alert-box alert-box--warning" style="margin-bottom:0.85rem;">' +
+                '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:0.5rem;margin-bottom:0.4rem;">' +
+                "<strong>" + esc(a.title) + "</strong>" +
+                '<span class="badge badge--warning">' + esc(a.level) + " · " + esc(a.date) + "</span>" +
+                "</div><p>" + esc(a.body) + "</p></div>"
+              );
+            })
+            .join("");
+
+          const annHtml = st.handaAnnouncements
+            .map(function (n) {
+              return (
+                '<div style="padding:0.9rem 0;border-bottom:1px solid var(--portal-border);">' +
+                '<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:0.5rem;">' +
+                "<strong>" + esc(n.title) + "</strong>" +
+                '<span class="badge">' + esc(n.date) + "</span>" +
+                "</div>" +
+                '<p style="font-size:0.92rem;color:var(--portal-text-muted);margin-top:0.35rem;">' + esc(n.body) + "</p>" +
+                "</div>"
+              );
+            })
+            .join("");
+
+          container.innerHTML =
+            '<div class="alert-box alert-box--warning">' +
+            '<span class="badge badge--warning" style="margin-bottom:0.5rem;">Current Alert Level (Sample)</span>' +
+            '<div style="font-size:1.25rem;font-weight:700;margin-bottom:0.25rem;">' + esc(st.handaAlerts.currentLevel) + "</div>" +
+            '<div style="font-size:0.86rem;color:var(--portal-text-muted);">Last updated: ' + esc(st.handaAlerts.updatedAt) + " · This resident view shows public safety information only.</div>" +
+            "</div>" +
+            '<div class="portal-grid-2">' +
+            '<div class="portal-card"><div class="portal-card-header"><h2 class="portal-card-title">Public Advisories</h2></div><div class="portal-card-body">' + advHtml + "</div></div>" +
+            '<div class="portal-card"><div class="portal-card-header"><h2 class="portal-card-title">Community Announcements</h2></div><div class="portal-card-body">' + annHtml + "</div></div>" +
+            "</div>" +
+            '<div class="portal-card"><div class="portal-card-header"><h2 class="portal-card-title">Evacuation Center Status (Sample)</h2></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Evacuation Center</th><th>Status</th><th>Current Occupancy</th><th>Contact</th></tr></thead><tbody>' +
+            centersHtml +
+            "</tbody></table></div></div>";
+          return;
+        }
+
+        // Staff / Officer Unified Dashboard — Calm, Focused, Priority-First
+        heading.textContent = "Welcome, " + role.short;
+        subtitle.textContent =
+          "Review active alerts, check essential barangay numbers, or jump directly to your committee tasks below.";
+        actions.innerHTML =
+          '<a href="registry.html" class="btn btn-primary btn-sm">Open Resident Registry</a>' +
+          '<a href="handa-plus.html#alerts" class="btn btn-secondary btn-sm">View Safety Alerts</a>';
+
+        const reg = store.getRegistryMetrics();
+        const st = store.state;
+        const pendingGabay = st.gabayRequests.filter(function (r) { return r.status === "Pending"; }).length;
+        const urgentGabay = st.gabayRequests.filter(function (r) { return r.priority === "Urgent" && r.status !== "Released" && r.status !== "Rejected"; }).length;
+        const lowGad = st.gadInventory.filter(function (i) { return i.stock <= i.threshold; }).length;
+        const lowHanda = st.handaInventory.filter(function (i) { return i.stock <= i.threshold; }).length;
+        const evacuees = st.handaCenters.reduce(function (s, c) { return s + c.checkedInResidentIds.length; }, 0);
+        const openCenters = st.handaCenters.filter(function (c) { return c.status === "Open"; }).length;
+
+        const alertsList = [
+          "<strong>Alert Status:</strong> " + esc(st.handaAlerts.currentLevel),
+          urgentGabay > 0 ? "<strong>Social Welfare:</strong> " + urgentGabay + " urgent medical/burial request(s) awaiting action." : "",
+          (lowGad + lowHanda) > 0 ? "<strong>Inventory Attention:</strong> " + lowGad + " GAD-CARE item(s) and " + lowHanda + " HANDA+ relief item(s) are running low." : ""
+        ].filter(Boolean);
+
+        const activitiesHtml = st.activityLog
+          .slice(0, 6)
+          .map(function (a) {
+            return (
+              "<tr><td><span class='badge badge--accent'>" + esc(a.module) + "</span></td><td>" + esc(a.text) + "</td><td style='color:var(--portal-text-muted);white-space:nowrap;'>" + esc(a.time) + "</td></tr>"
+            );
+          })
+          .join("");
+
+        container.innerHTML =
+          '<div class="alert-box alert-box--warning">' +
+          '<div style="font-weight:700;margin-bottom:0.35rem;">Important Notices Today</div>' +
+          '<ul style="padding-left:1.2rem;margin:0;display:flex;flex-direction:column;gap:0.25rem;">' +
+          alertsList.map(function (line) { return "<li>" + line + "</li>"; }).join("") +
+          "</ul></div>" +
+          '<div class="kpi-grid">' +
+          '<div class="kpi-card kpi-card--accent"><span class="kpi-label">Registered Community</span><span class="kpi-value">' + reg.residents + '</span><span class="kpi-sub">' + reg.households + " households · " + reg.families + " families · " + reg.seniors + " seniors · " + reg.pwds + " PWDs</span></div>" +
+          '<div class="kpi-card"><span class="kpi-label">GAD-CARE Beneficiaries</span><span class="kpi-value">' + st.gadBeneficiaries.length + '</span><span class="kpi-sub">' + lowGad + " supply item(s) need restocking</span></div>" +
+          '<div class="kpi-card"><span class="kpi-label">GABAY Assistance Queue</span><span class="kpi-value">' + pendingGabay + '</span><span class="kpi-sub">' + urgentGabay + " urgent medical or burial case(s)</span></div>" +
+          '<div class="kpi-card kpi-card--danger"><span class="kpi-label">HANDA+ Evacuees</span><span class="kpi-value">' + evacuees + '</span><span class="kpi-sub">' + openCenters + " open evacuation center(s)</span></div>" +
+          "</div>" +
+          '<div>' +
+          '<h2 style="font-size:1.1rem;font-weight:700;margin-bottom:0.8rem;">Quick Tasks</h2>' +
+          '<div class="quick-action-grid">' +
+          '<a href="registry.html" class="quick-action-card"><span class="quick-action-title">Register Household</span><span class="quick-action-desc">Add or update families and residents in the shared registry.</span><span class="quick-action-link">Go to Resident Registry &rarr;</span></a>' +
+          '<a href="gad-care.html#release" class="quick-action-card"><span class="quick-action-title">Release GAD-CARE Kits</span><span class="quick-action-desc">Verify eligibility and release maternal or hygiene kits.</span><span class="quick-action-link">Open Kit Release &rarr;</span></a>' +
+          '<a href="gabay.html#request-management" class="quick-action-card"><span class="quick-action-title">Manage Aid Requests</span><span class="quick-action-desc">Review urgent requests, release aid, or print indigency certificates.</span><span class="quick-action-link">Open Request Queue &rarr;</span></a>' +
+          '<a href="handa-plus.html#distribution" class="quick-action-card"><span class="quick-action-title">Record Relief Distribution</span><span class="quick-action-desc">Check household claims and prevent duplicate releases.</span><span class="quick-action-link">Open Relief Distribution &rarr;</span></a>' +
+          "</div></div>" +
+          '<div class="portal-card">' +
+          '<div class="portal-card-header"><h2 class="portal-card-title">Recent Activity</h2><span class="badge">Live Session</span></div>' +
+          '<div class="table-wrap"><table class="data-table"><thead><tr><th>Committee</th><th>What Happened</th><th>Date &amp; Time</th></tr></thead><tbody>' +
+          activitiesHtml +
+          "</tbody></table></div></div>";
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        window.BICIS_PORTAL.initPortalPage({
+          moduleId: "portal",
+          defaultView: "dashboard",
+          viewTitles: {
+            dashboard: "Home Dashboard",
+            overview: "System Guide"
+          },
+          onViewChange: function (viewId) {
+            if (viewId === "dashboard") renderDashboard();
+          },
+          onRoleChange: function () {
+            renderDashboard();
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

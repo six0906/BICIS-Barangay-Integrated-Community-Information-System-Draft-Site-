@@ -1,0 +1,260 @@
+/* ==========================================================================
+   BICIS — Authentication Pages (Login & Registration)
+   Minimalist Editorial Forms + Privacy Notice Integration
+   ========================================================================== */
+
+.auth-page-body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+}
+
+.auth-main {
+  flex: 1;
+  padding-top: calc(var(--nav-height) + clamp(2rem, 4vw, 3.5rem));
+  padding-bottom: clamp(3rem, 5vw, 5rem);
+  display: flex;
+  align-items: center;
+}
+
+.auth-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: clamp(2.5rem, 6vw, 5.5rem);
+  align-items: start;
+}
+
+/* Left Editorial Brand Column */
+.auth-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding-top: 0.5rem;
+}
+
+.auth-aside-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+  color: var(--text-primary);
+}
+
+.auth-aside-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 44ch;
+  line-height: 1.7;
+}
+
+.auth-location-strip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-secondary);
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  width: fit-content;
+}
+
+.auth-location-strip strong {
+  color: var(--text-primary);
+}
+
+/* Right Minimalist Auth Form Card */
+.auth-card {
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  padding: clamp(1.75rem, 3.8vw, 3rem);
+  box-shadow: var(--shadow-subtle);
+}
+
+.auth-card-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.auth-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.9rem, 3vw, 2.45rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-top: 0.55rem;
+  margin-bottom: 0.55rem;
+}
+
+.auth-subheading {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Password Input with Show/Hide Toggle */
+.password-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrap .form-input {
+  padding-right: 3rem;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 0.55rem;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-xs);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.password-toggle-btn:hover {
+  color: var(--accent);
+  background-color: var(--accent-soft);
+}
+
+.password-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Password Strength Meter */
+.password-strength {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.strength-bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.3rem;
+  height: 3px;
+}
+
+.strength-bar {
+  background-color: var(--border);
+  border-radius: 1px;
+  transition: background-color var(--transition-fast);
+}
+
+.strength-bar.is-filled {
+  background-color: var(--accent);
+}
+
+.strength-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+/* Row for Remember Me & Forgot Password */
+.auth-row-between {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+/* Accessible Custom Checkbox */
+.checkbox-field {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  cursor: pointer;
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.checkbox-field input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 2px;
+  background-color: var(--bg-primary);
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.checkbox-field input[type="checkbox"]::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  transform: scale(0);
+  transition: transform 140ms ease;
+  background-color: #FFFFFF;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+.checkbox-field input[type="checkbox"]:checked {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-field input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+.checkbox-field input[type="checkbox"].is-invalid {
+  border-color: var(--error-color);
+}
+
+.inline-action-link {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.86rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity var(--transition-fast);
+}
+
+.inline-action-link:hover {
+  opacity: 0.8;
+}
+
+.auth-switch-footer {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.auth-backend-note {
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-xs);
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+.auth-backend-note strong {
+  color: var(--text-primary);
+}

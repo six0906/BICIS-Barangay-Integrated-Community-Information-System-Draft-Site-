@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BICIS Resident Registry — Central Household, Family, and Resident Information System for Barangay Dimagiba, Legazpi City, Albay.">
+  <title>Resident Registry — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/portal.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="portal-body">
+  <div class="portal-shell">
+    <aside id="portal-sidebar" class="portal-sidebar" aria-label="BICIS Portal Navigation"></aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <div class="portal-workspace">
+      <header class="portal-topbar">
+        <div class="portal-topbar-left">
+          <button type="button" id="sidebar-mobile-trigger" class="sidebar-mobile-trigger" aria-label="Open portal sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="portal-breadcrumb">
+            <span class="portal-breadcrumb-module">Core Records · Central Source</span>
+            <span id="portal-breadcrumb-page" class="portal-breadcrumb-page">Resident Registry</span>
+          </div>
+        </div>
+
+        <div class="portal-topbar-right">
+          <div class="role-switcher-wrap" title="Proposed role preview — production permissions must be enforced on the PHP backend">
+            <span class="role-switcher-label">Role Preview</span>
+            <select id="portal-role-select" class="role-switcher-select" aria-label="Switch proposed preview role"></select>
+          </div>
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5"></circle><line x1="12" y1="2.5" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="21.5"></line><line x1="4.9" y1="4.9" x2="6.7" y2="6.7"></line><line x1="17.3" y1="17.3" x2="19.1" y2="19.1"></line><line x1="2.5" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="21.5" y2="12"></line><line x1="4.9" y1="19.1" x2="6.7" y2="17.3"></line><line x1="17.3" y1="6.7" x2="19.1" y2="4.9"></line>
+            </svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="sample-data-strip">
+        <span><strong>Preview Notice:</strong> This shared Resident Registry feeds GAD-CARE, GABAY, and HANDA+. Changes stay in this browser session until connected to PHP/MySQL.</span>
+      </div>
+
+      <main class="portal-content">
+        <div id="registry-restricted" class="restricted-notice" style="display:none;">
+          <span class="badge badge--danger">Access Restricted</span>
+          <h1 class="serif-heading" style="font-size:1.75rem;">Resident Registry Requires Staff Authorization</h1>
+          <p style="max-width:52ch;color:var(--text-secondary);font-size:0.92rem;">
+            Under RA 10173 data privacy rules, resident profiles and household records are not exposed to Resident Read-Only accounts. Switch to a staff role preview above or return to the public dashboard.
+          </p>
+          <a href="portal.html#dashboard" class="btn btn-primary btn-sm">Return to Resident Dashboard</a>
+        </div>
+
+        <section id="view-dashboard" class="portal-view is-active" aria-labelledby="registry-heading">
+          <div class="module-header">
+            <div>
+              <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Central Barangay Database</span></span>
+              <h1 id="registry-heading" class="module-header-title">Resident Registry</h1>
+              <p class="module-header-desc">
+                Search, expand, and manage Household → Family → Member records referenced across GAD-CARE, GABAY, and HANDA+.
+              </p>
+            </div>
+            <div class="module-actions">
+              <button type="button" id="btn-print-registry" class="btn btn-secondary btn-sm">Print Report</button>
+              <button type="button" id="btn-open-add-hh" class="btn btn-primary btn-sm">Register Household</button>
+            </div>
+          </div>
+
+          <!-- Summary KPI Cards -->
+          <div id="registry-kpi-grid" class="kpi-grid"></div>
+
+          <!-- Searchable, Filterable, Sortable Expandable Table -->
+          <div class="portal-card">
+            <div class="portal-card-header">
+              <h2 class="portal-card-title">Household &amp; Resident Directory</h2>
+              <span id="registry-result-count" class="badge">0 households</span>
+            </div>
+
+            <div class="toolbar">
+              <div class="toolbar-search">
+                <label for="reg-search" class="sr-only">Search households or residents</label>
+                <input type="search" id="reg-search" class="form-input" placeholder="Search by Household ID, Address, Family Head, or Resident Name...">
+              </div>
+              <div class="toolbar-control">
+                <label for="reg-purok-filter" class="sr-only">Filter by Purok</label>
+                <select id="reg-purok-filter" class="form-select">
+                  <option value="all">All Puroks</option>
+                  <option value="Purok 1">Purok 1</option>
+                  <option value="Purok 2">Purok 2</option>
+                  <option value="Purok 3">Purok 3</option>
+                  <option value="Purok 4">Purok 4</option>
+                  <option value="Purok 5">Purok 5</option>
+                </select>
+              </div>
+              <details class="advanced-filters">
+                <summary>More Filters &amp; Sorting (Sector, Status, Sort Order)</summary>
+                <div class="advanced-filters-grid">
+                  <div>
+                    <label for="reg-sector-filter" class="form-label" style="font-size:0.82rem;">Sector Tag</label>
+                    <select id="reg-sector-filter" class="form-select">
+                      <option value="all">All Sectors</option>
+                      <option value="Senior Citizen">Senior Citizen</option>
+                      <option value="PWD">PWD</option>
+                      <option value="4Ps">4Ps Household</option>
+                      <option value="Solo Parent">Solo Parent</option>
+                      <option value="Pregnant Woman">Pregnant Woman</option>
+                      <option value="Lactating Mother">Lactating Mother</option>
+                      <option value="Infant (0-24 mos)">Infant (0-24 mos)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="reg-status-filter" class="form-label" style="font-size:0.82rem;">Resident Status</label>
+                    <select id="reg-status-filter" class="form-select">
+                      <option value="all">All Statuses</option>
+                      <option value="Active">Active</option>
+                      <option value="Transferred">Transferred</option>
+                      <option value="Deceased">Deceased</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="reg-sort" class="form-label" style="font-size:0.82rem;">Sort Households By</label>
+                    <select id="reg-sort" class="form-select">
+                      <option value="id-asc">Household ID (A–Z)</option>
+                      <option value="purok-asc">Purok (1–5)</option>
+                      <option value="members-desc">Most Members First</option>
+                      <option value="head-asc">Family Head Name (A–Z)</option>
+                    </select>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="width:46px;">Expand</th>
+                    <th>Household ID</th>
+                    <th>Purok &amp; Address</th>
+                    <th>Families</th>
+                    <th>Members</th>
+                    <th>Sector Tags</th>
+                    <th class="no-print">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="registry-table-body"></tbody>
+              </table>
+            </div>
+            <div id="registry-pagination" class="pagination-bar"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MULTI-STEP ADD HOUSEHOLD MODAL (DYNAMIC FAMILIES & MEMBERS)
+       ====================================================================== -->
+  <div id="add-household-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="add-hh-title" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:860px;">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow eyebrow--accent">Multi-Step Registration</span>
+          <h2 id="add-hh-title" class="modal-title">Add New Household</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close Add Household dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="wizard-steps" id="hh-wizard-steps">
+          <div class="wizard-step-pill is-active" data-step-pill="1">1. Household Info</div>
+          <div class="wizard-step-pill" data-step-pill="2">2. Families</div>
+          <div class="wizard-step-pill" data-step-pill="3">3. Members</div>
+          <div class="wizard-step-pill" data-step-pill="4">4. Review &amp; Save</div>
+        </div>
+
+        <div id="add-hh-banner" class="form-banner" role="alert"></div>
+
+        <!-- Step 1: Household Info -->
+        <div class="wizard-panel is-active" data-wizard-step="1">
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="form-label" for="add-hh-purok">Purok</label>
+              <select id="add-hh-purok" class="form-select" required>
+                <option value="Purok 1">Purok 1</option>
+                <option value="Purok 2">Purok 2</option>
+                <option value="Purok 3">Purok 3</option>
+                <option value="Purok 4">Purok 4</option>
+                <option value="Purok 5">Purok 5</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="add-hh-family-count">Number of Families in Household</label>
+              <input type="number" id="add-hh-family-count" class="form-input" min="1" max="5" value="1" required>
+            </div>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="add-hh-street">Street &amp; House Number</label>
+            <input type="text" id="add-hh-street" class="form-input" placeholder="e.g., House 120, Central Path" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="add-hh-address">Complete Address</label>
+            <input type="text" id="add-hh-address" class="form-input" value="Barangay Dimagiba, Legazpi City, Albay" required>
+          </div>
+        </div>
+
+        <!-- Step 2: Dynamically Generated Family Sections -->
+        <div class="wizard-panel" data-wizard-step="2">
+          <p style="font-size:0.86rem;color:var(--text-secondary);">Configure each family below. Member sections in Step 3 will be generated automatically from the number of members entered.</p>
+          <div id="dynamic-families-container" class="form-stack"></div>
+        </div>
+
+        <!-- Step 3: Dynamically Generated Member Sections -->
+        <div class="wizard-panel" data-wizard-step="3">
+          <p style="font-size:0.86rem;color:var(--text-secondary);">Enter individual resident details for every member. Age is calculated automatically from birthdate.</p>
+          <div id="dynamic-members-container" class="form-stack"></div>
+        </div>
+
+        <!-- Step 4: Review -->
+        <div class="wizard-panel" data-wizard-step="4">
+          <div id="hh-review-summary" class="form-stack"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" id="wizard-prev-btn" class="btn btn-secondary btn-sm" style="display:none;">Previous Step</button>
+        <div style="display:flex;gap:0.6rem;margin-left:auto;">
+          <button type="button" class="btn btn-ghost btn-sm" data-modal-close>Cancel</button>
+          <button type="button" id="wizard-next-btn" class="btn btn-primary btn-sm">Next Step</button>
+          <button type="button" id="wizard-save-btn" class="btn btn-primary btn-sm" style="display:none;">Save Household (Session)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT HOUSEHOLD MODAL -->
+  <div id="edit-household-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="edit-hh-title" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:540px;">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow eyebrow--accent">Update Record</span>
+          <h2 id="edit-hh-title" class="modal-title">Edit Household</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close edit dialog">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="edit-hh-form" class="form-stack">
+          <input type="hidden" id="edit-hh-id">
+          <div class="form-field">
+            <label class="form-label" for="edit-hh-purok">Purok</label>
+            <select id="edit-hh-purok" class="form-select">
+              <option value="Purok 1">Purok 1</option>
+              <option value="Purok 2">Purok 2</option>
+              <option value="Purok 3">Purok 3</option>
+              <option value="Purok 4">Purok 4</option>
+              <option value="Purok 5">Purok 5</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="edit-hh-street">Street &amp; House Number</label>
+            <input type="text" id="edit-hh-street" class="form-input" required>
+          </div>
+          <div class="form-field">
+            <label class="form-label" for="edit-hh-address">Complete Address</label>
+            <input type="text" id="edit-hh-address" class="form-input" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- INDIVIDUAL RESIDENT PROFILE MODAL -->
+  <div id="resident-profile-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="res-profile-title" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:680px;">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow eyebrow--accent">Individual Resident Profile</span>
+          <h2 id="res-profile-title" class="modal-title">Resident Details</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close resident profile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="resident-profile-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" data-modal-close>Close Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="delete-household-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="del-hh-title" aria-hidden="true">
+    <div class="modal-dialog" style="max-width:480px;">
+      <div class="modal-header">
+        <div>
+          <span class="eyebrow" style="color:var(--error-color);">Destructive Action</span>
+          <h2 id="del-hh-title" class="modal-title">Confirm Household Deletion</h2>
+        </div>
+        <button type="button" class="modal-close" data-modal-close aria-label="Close delete confirmation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="alert-box alert-box--danger" id="delete-hh-message"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-modal-close>Cancel</button>
+        <button type="button" id="confirm-delete-hh-btn" class="btn btn-primary btn-sm" style="background:var(--error-color);border-color:var(--error-color);">Delete Household</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/bicis-store.js"></script>
+  <script src="../js/portal-shell.js"></script>
+  <script src="../js/registry.js"></script>
+</body>
+</html>

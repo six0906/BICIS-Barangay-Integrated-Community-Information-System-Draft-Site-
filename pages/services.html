@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Explore BICIS, DRRM, GAD, and Social Welfare community services for Barangay Dimagiba, Legazpi City, Albay.">
+  <title>Community Services — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to community services</a>
+
+  <header class="site-header is-solid">
+    <div class="container nav-inner">
+      <a href="../index.html" class="brand-link" aria-label="BICIS Home">
+        <svg class="brand-emblem" viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 3.5L40.5 11.5V24.5C40.5 33.6 33.5 40.3 24 44.5C14.5 40.3 7.5 33.6 7.5 24.5V11.5L24 3.5Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M14.5 29C15.5 24.2 19.3 21.2 24 21.2C28.7 21.2 32.5 24.2 33.5 29" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
+          <path d="M18.5 33.5C20.1 31.8 21.9 31 24 31C26.1 31 27.9 31.8 29.5 33.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          <circle cx="16.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="31.5" cy="18.2" r="2.2" fill="currentColor"></circle>
+          <circle cx="24" cy="14.5" r="3.4" fill="var(--accent)"></circle>
+          <circle cx="24" cy="26.5" r="2" fill="var(--accent)"></circle>
+        </svg>
+        <span class="brand-text">
+          <span class="brand-name">BICIS</span>
+          <span class="brand-sub">Community Information System</span>
+        </span>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="../index.html" class="nav-link">Home</a></li>
+          <li><a href="about.html" class="nav-link">About BICIS</a></li>
+          <li><a href="services.html" class="nav-link is-active" aria-current="page">Community Services</a></li>
+          <li><a href="portal.html" class="nav-link">System Portal</a></li>
+          <li><a href="../index.html#contact" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5"></circle>
+            <line x1="12" y1="2.5" x2="12" y2="5"></line>
+            <line x1="12" y1="19" x2="12" y2="21.5"></line>
+            <line x1="4.9" y1="4.9" x2="6.7" y2="6.7"></line>
+            <line x1="17.3" y1="17.3" x2="19.1" y2="19.1"></line>
+            <line x1="2.5" y1="12" x2="5" y2="12"></line>
+            <line x1="19" y1="12" x2="21.5" y2="12"></line>
+            <line x1="4.9" y1="19.1" x2="6.7" y2="17.3"></line>
+            <line x1="17.3" y1="6.7" x2="19.1" y2="4.9"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+
+        <a href="login.html" class="btn btn-primary btn-sm nav-auth-desktop">Login / Register</a>
+
+        <button type="button" class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-drawer">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav aria-label="Mobile Navigation">
+      <ul class="mobile-nav-list">
+        <li><a href="../index.html">Home <span>01</span></a></li>
+        <li><a href="about.html">About BICIS <span>02</span></a></li>
+        <li><a href="services.html" class="is-active">Community Services <span>03</span></a></li>
+        <li><a href="../index.html#contact">Contact <span>04</span></a></li>
+        <li><a href="privacy.html">Privacy Notice <span>05</span></a></li>
+      </ul>
+    </nav>
+    <div class="mobile-drawer-footer">
+      <a href="login.html" class="btn btn-primary btn-block">Login / Register</a>
+    </div>
+  </div>
+
+  <main id="main-content" class="page-main">
+    <section class="page-hero">
+      <div class="container">
+        <span class="eyebrow eyebrow--accent">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          <span>Barangay Dimagiba · Legazpi City, Albay</span>
+        </span>
+        <h1 class="page-hero-title">Community Services &amp; Public Information</h1>
+        <p class="section-lead">
+          Explore the four core sections of BICIS: the central community information platform, Disaster Risk Reduction and Management (DRRM), Gender and Development (GAD), and Social Welfare Services.
+        </p>
+      </div>
+    </section>
+
+    <section class="editorial-section">
+      <div class="container">
+        <!-- Category Filter Tabs -->
+        <div class="service-tabs" role="group" aria-label="Filter service sections">
+          <button type="button" class="service-tab-btn is-active" data-service-filter="all" aria-pressed="true">All Sections (04)</button>
+          <button type="button" class="service-tab-btn" data-service-filter="bicis" aria-pressed="false">01 · BICIS</button>
+          <button type="button" class="service-tab-btn" data-service-filter="drrm" aria-pressed="false">02 · DRRM</button>
+          <button type="button" class="service-tab-btn" data-service-filter="gad" aria-pressed="false">03 · GAD</button>
+          <button type="button" class="service-tab-btn" data-service-filter="social-welfare" aria-pressed="false">04 · Social Welfare</button>
+        </div>
+
+        <!-- 01 — BICIS -->
+        <article id="bicis" class="service-detail-card" data-service-category="bicis" data-reveal>
+          <div class="service-detail-grid">
+            <div>
+              <span class="eyebrow eyebrow--accent">01 · Central Community Platform</span>
+              <h2 class="section-title" style="font-size: clamp(1.75rem, 3vw, 2.4rem); margin-top: 0.65rem; margin-bottom: 1rem;">
+                Barangay Integrated Community Information System (BICIS)
+              </h2>
+              <p class="section-lead" style="margin-bottom: 1.5rem;">
+                Your central destination for accessible barangay information, essential services, community updates, and public resources in Barangay Dimagiba.
+              </p>
+              <a href="../index.html#community-map" class="btn btn-secondary btn-sm">Explore Barangay Dimagiba Map</a>
+            </div>
+            <div>
+              <h3 class="footer-col-title">Key Public Resources</h3>
+              <ul class="service-checklist">
+                <li>Centralized barangay announcements, assembly schedules, and public advisories.</li>
+                <li>Accessible navigation to DRRM, GAD, and Social Welfare desks.</li>
+                <li>Resident account registration and transparent privacy controls under RA 10173.</li>
+                <li>Interactive illustrated community map highlighting key barangay service hubs.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- 02 — DRRM -->
+        <article id="drrm" class="service-detail-card" data-service-category="drrm" data-reveal>
+          <div class="service-detail-grid">
+            <div>
+              <span class="eyebrow eyebrow--accent">02 · Preparedness &amp; Safety</span>
+              <h2 class="section-title" style="font-size: clamp(1.75rem, 3vw, 2.4rem); margin-top: 0.65rem; margin-bottom: 1rem;">
+                Disaster Risk Reduction and Management (DRRM)
+              </h2>
+              <p class="section-lead" style="margin-bottom: 1.5rem;">
+                Stay informed, prepared, and aware through disaster preparedness information, emergency announcements, safety guidelines, and community risk awareness.
+              </p>
+              <a href="../index.html#contact" class="btn btn-primary btn-sm">Contact DRRM Desk</a>
+            </div>
+            <div>
+              <h3 class="footer-col-title">Preparedness &amp; Safety Focus</h3>
+              <ul class="service-checklist">
+                <li>Household emergency go-bag reminders: clean water, first aid, flashlight, radio, and vital documents.</li>
+                <li>Community risk awareness for typhoons, heavy rainfall, flooding, and volcanic or seismic advisories relevant to Albay.</li>
+                <li>Clear safety guidelines and coordination notices issued by official barangay and city DRRM authorities.</li>
+                <li>Pre-emptive evacuation readiness and designated assembly zone guidance.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- 03 — GAD -->
+        <article id="gad" class="service-detail-card" data-service-category="gad" data-reveal>
+          <div class="service-detail-grid">
+            <div>
+              <span class="eyebrow eyebrow--accent">03 · Equality &amp; Inclusivity</span>
+              <h2 class="section-title" style="font-size: clamp(1.75rem, 3vw, 2.4rem); margin-top: 0.65rem; margin-bottom: 1rem;">
+                Gender and Development (GAD)
+              </h2>
+              <p class="section-lead" style="margin-bottom: 1.5rem;">
+                Promoting equality, inclusivity, awareness, and accessible information about gender-related programs and community initiatives.
+              </p>
+              <a href="../index.html#contact" class="btn btn-secondary btn-sm">Inquire About GAD Programs</a>
+            </div>
+            <div>
+              <h3 class="footer-col-title">Program &amp; Awareness Priorities</h3>
+              <ul class="service-checklist">
+                <li>Information on inclusive barangay orientations, community workshops, and equality advocacy.</li>
+                <li>Safe-space awareness and referral guidance for residents seeking confidential community support.</li>
+                <li>Accessible participation opportunities for women, youth, and underrepresented community members.</li>
+                <li>Transparent sharing of Barangay GAD activity calendars and public initiatives.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <!-- 04 — SOCIAL WELFARE -->
+        <article id="social-welfare" class="service-detail-card" data-service-category="social-welfare" data-reveal>
+          <div class="service-detail-grid">
+            <div>
+              <span class="eyebrow eyebrow--accent">04 · Community Assistance</span>
+              <h2 class="section-title" style="font-size: clamp(1.75rem, 3vw, 2.4rem); margin-top: 0.65rem; margin-bottom: 1rem;">
+                Social Welfare Services
+              </h2>
+              <p class="section-lead" style="margin-bottom: 1.5rem;">
+                Discover community assistance programs, social services, available support, and important information for residents and families.
+              </p>
+              <a href="register.html" class="btn btn-primary btn-sm">Create Resident Account</a>
+            </div>
+            <div>
+              <h3 class="footer-col-title">Resident &amp; Family Support</h3>
+              <ul class="service-checklist">
+                <li>Information on community aid schedules, eligibility guidance, and barangay referral procedures.</li>
+                <li>Support awareness for senior citizens, persons with disabilities, solo parents, and vulnerable households.</li>
+                <li>Clear checklists of standard documents requested by barangay welfare desks.</li>
+                <li>Direct links to community inquiry channels for resident follow-up.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="padding-top: 0;">
+        <span>&copy; Barangay Integrated Community Information System (BICIS) — Barangay Dimagiba, Legazpi City, Albay.</span>
+        <span>
+          <a href="../index.html" style="margin-right: 1.25rem;">Home</a>
+          <a href="about.html" style="margin-right: 1.25rem;">About</a>
+          <a href="privacy.html" class="inline-action-link">Privacy Notice</a>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+</body>
+</html>

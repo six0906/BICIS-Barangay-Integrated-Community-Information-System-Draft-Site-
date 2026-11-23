@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HANDA+ — Disaster Risk Reduction and Management: Hazards, Priority Rescue List, Evacuation Check-in, Relief Distribution, Alerts, and Barangay Map on BICIS.">
+  <title>HANDA+ DRRM — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/portal.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="portal-body">
+  <div class="portal-shell">
+    <aside id="portal-sidebar" class="portal-sidebar" aria-label="BICIS Portal Navigation"></aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <div class="portal-workspace">
+      <header class="portal-topbar">
+        <div class="portal-topbar-left">
+          <button type="button" id="sidebar-mobile-trigger" class="sidebar-mobile-trigger" aria-label="Open portal sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="portal-breadcrumb">
+            <span class="portal-breadcrumb-module">HANDA+ · DRRM</span>
+            <span id="portal-breadcrumb-page" class="portal-breadcrumb-page">Dashboard</span>
+          </div>
+        </div>
+        <div class="portal-topbar-right">
+          <div class="role-switcher-wrap">
+            <span class="role-switcher-label">Role Preview</span>
+            <select id="portal-role-select" class="role-switcher-select" aria-label="Switch proposed preview role"></select>
+          </div>
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="4.9" y1="4.9" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.1" y2="19.1"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="19.1" x2="6.7" y2="17.3"/><line x1="17.3" y1="6.7" x2="19.1" y2="4.9"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="sample-data-strip">
+        <span><strong>Preview Notice:</strong> Purok hazard levels, evacuation center capacities, relief counts, and alert levels are sample data pending official Barangay DRRM confirmation.</span>
+      </div>
+
+      <main class="portal-content">
+        <div id="handa-restricted" class="restricted-notice" style="display:none;">
+          <span class="badge badge--danger">Role Access Restricted</span>
+          <h1 class="serif-heading" style="font-size:1.75rem;">Restricted HANDA+ Operations View</h1>
+          <p id="handa-restricted-msg" style="max-width:54ch;color:var(--text-secondary);font-size:0.92rem;">
+            This operational DRRM view is restricted for your active preview role. Residents have Phase 1 read-only access to Alerts &amp; Advisories, Announcements, Evacuation Centers, and Barangay Map.
+          </p>
+          <div style="display:flex;gap:0.65rem;flex-wrap:wrap;">
+            <a href="#alerts" class="btn btn-primary btn-sm">View Public Alerts</a>
+            <a href="#centers" class="btn btn-secondary btn-sm">Evacuation Centers</a>
+          </div>
+        </div>
+
+        <div id="handa-views-root">
+          <!-- 1. DASHBOARD -->
+          <section id="view-dashboard" class="portal-view is-active">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>HANDA+ Command Overview</span></span>
+                <h1 class="module-header-title">DRRM Readiness Dashboard</h1>
+                <p class="module-header-desc">Live session overview of evacuees, open evacuation centers, relief inventory, alert level, and priority household needs.</p>
+              </div>
+              <div class="module-actions">
+                <a href="#rescue-list" class="btn btn-secondary btn-sm">Priority Rescue List</a>
+                <a href="#distribution" class="btn btn-primary btn-sm">Relief Distribution</a>
+              </div>
+            </div>
+            <div id="handa-alert-banner"></div>
+            <div id="handa-kpi-grid" class="kpi-grid"></div>
+            <div id="handa-shortage-box"></div>
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Cross-Committee Household Needs Summary</h2></div>
+                <div class="portal-card-body" id="handa-needs-summary"></div>
+              </div>
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Evacuation Center Occupancy (Sample)</h2><a href="#checkin" class="inline-action-link">Manage Check-in</a></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Center</th><th>Status</th><th>Occupancy</th></tr></thead><tbody id="handa-dash-centers"></tbody></table></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. HAZARD TAGGING BY PUROK -->
+          <section id="view-hazards" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Risk Mapping (Sample Data)</span></span>
+                <h1 class="module-header-title">Hazard Tagging by Purok</h1>
+                <p class="module-header-desc">Tag illustrative purok hazard profiles pending official Barangay Dimagiba DRRM validation.</p>
+              </div>
+            </div>
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Update Purok Hazard Tag</h2></div>
+                <div class="portal-card-body">
+                  <form id="handa-hazard-form" class="form-stack">
+                    <div class="form-grid-2">
+                      <div class="form-field">
+                        <label class="form-label" for="hz-purok">Purok</label>
+                        <select id="hz-purok" class="form-select"><option>Purok 1</option><option>Purok 2</option><option>Purok 3</option><option>Purok 4</option><option>Purok 5</option></select>
+                      </div>
+                      <div class="form-field">
+                        <label class="form-label" for="hz-risk">Risk Level</label>
+                        <select id="hz-risk" class="form-select"><option>High</option><option>Medium</option><option>Low</option></select>
+                      </div>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="hz-type">Hazard Type</label>
+                      <input type="text" id="hz-type" class="form-input" placeholder="e.g., Flood / Storm Surge / Ashfall (Sample)" required>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="hz-notes">Field Notes</label>
+                      <input type="text" id="hz-notes" class="form-input" placeholder="Pending official DRRM confirmation">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Update Purok Hazard</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Purok Hazard Registry (Sample)</h2></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Purok</th><th>Hazard Type</th><th>Risk Level</th><th>Households</th></tr></thead><tbody id="handa-hazards-tbody"></tbody></table></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. PRIORITY RESCUE LIST -->
+          <section id="view-rescue-list" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Registry + GAD + GABAY Integration</span></span>
+                <h1 class="module-header-title">Priority Rescue List</h1>
+                <p class="module-header-desc">Automatically identifies priority households using Resident Registry sectors (PWD, Senior, Pregnant, Infant) combined with Purok hazard risk and authorized GAD/GABAY flags.</p>
+              </div>
+              <div class="module-actions">
+                <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Print Priority Rescue List</button>
+              </div>
+            </div>
+            <div class="portal-card">
+              <div class="toolbar">
+                <div class="toolbar-control">
+                  <select id="rescue-purok-filter" class="form-select">
+                    <option value="all">All Puroks</option><option>Purok 1</option><option>Purok 2</option><option>Purok 3</option><option>Purok 4</option><option>Purok 5</option>
+                  </select>
+                </div>
+                <div class="toolbar-control">
+                  <select id="rescue-tier-filter" class="form-select">
+                    <option value="all">All Priority Tiers</option><option value="Critical">Critical</option><option value="High">High</option><option value="Standard">Standard</option>
+                  </select>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead><tr><th>Tier</th><th>Household &amp; Purok</th><th>Head &amp; Contact</th><th>Hazard Risk</th><th>Priority Indicators (Shared Data)</th></tr></thead>
+                  <tbody id="handa-rescue-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. EVACUATION CENTERS (Also Resident Phase 1 Read-Only) -->
+          <section id="view-centers" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Shelter Monitoring (Sample Data)</span></span>
+                <h1 class="module-header-title">Evacuation Centers</h1>
+                <p class="module-header-desc">Capacity, live session occupancy, operational status, address, and contact details (awaiting official Barangay Dimagiba confirmation).</p>
+              </div>
+            </div>
+            <div class="portal-card">
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead><tr><th>Center ID &amp; Name</th><th>Address</th><th>Occupancy / Capacity</th><th>Status</th><th>Contact</th></tr></thead>
+                  <tbody id="handa-centers-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. EVACUATION CHECK-IN & CHECK-OUT -->
+          <section id="view-checkin" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Live Evacuee Tracking</span></span>
+                <h1 class="module-header-title">Evacuation Check-in &amp; Check-out</h1>
+                <p class="module-header-desc">Check residents from the Resident Registry into open evacuation centers; headcounts update automatically on check-in and check-out.</p>
+              </div>
+            </div>
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Check In Resident</h2></div>
+                <div class="portal-card-body">
+                  <form id="handa-checkin-form" class="form-stack">
+                    <div id="handa-checkin-banner" class="form-banner" role="alert"></div>
+                    <div class="form-field">
+                      <label class="form-label" for="ci-resident">Resident (Central Registry)</label>
+                      <select id="ci-resident" class="form-select" required></select>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="ci-center">Evacuation Center</label>
+                      <select id="ci-center" class="form-select" required></select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Check In Evacuee</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Currently Checked-In Evacuees</h2></div>
+                <div class="table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th>Resident</th><th>Purok</th><th>Evacuation Center</th><th>Action</th></tr></thead>
+                    <tbody id="handa-evacuees-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. RELIEF INVENTORY -->
+          <section id="view-inventory" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Emergency Stockpile</span></span>
+                <h1 class="module-header-title">Relief Inventory</h1>
+                <p class="module-header-desc">Monitor food packs, water jugs, emergency kits, and low-stock thresholds.</p>
+              </div>
+            </div>
+            <div class="portal-card">
+              <div class="portal-card-body">
+                <form id="handa-stock-form" class="form-grid-3" style="align-items:end;">
+                  <div class="form-field"><label class="form-label" for="h-stock-item">Relief Item</label><select id="h-stock-item" class="form-select"></select></div>
+                  <div class="form-field"><label class="form-label" for="h-stock-type">Adjust Stock</label><div style="display:flex;gap:0.5rem;"><select id="h-stock-type" class="form-select"><option value="in">Stock-In (+)</option><option value="out">Stock-Out (&minus;)</option></select><input type="number" id="h-stock-qty" class="form-input" min="1" value="10" style="max-width:100px;"></div></div>
+                  <button type="submit" class="btn btn-primary">Save Stock</button>
+                </form>
+                <div id="handa-stock-banner" class="form-banner" style="margin-top:0.85rem;" role="alert"></div>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table"><thead><tr><th>Item ID</th><th>Relief Supply</th><th>Available Stock</th><th>Threshold</th><th>Status</th></tr></thead><tbody id="handa-inventory-tbody"></tbody></table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 7. RELIEF RULES -->
+          <section id="view-rules" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Fair Distribution Policy</span></span>
+                <h1 class="module-header-title">Relief Allocation Rules</h1>
+                <p class="module-header-desc">Sample allocation rules per household tier — quantities subject to official Barangay DRRM approval.</p>
+              </div>
+            </div>
+            <div class="portal-card">
+              <div class="table-wrap"><table class="data-table"><thead><tr><th>Rule ID</th><th>Household Tier</th><th>Allocated Relief Item</th><th>Qty</th><th>Notes</th></tr></thead><tbody id="handa-rules-tbody"></tbody></table></div>
+            </div>
+          </section>
+
+          <!-- 8. RELIEF DISTRIBUTION (Duplicate "Already Received" Red Warning) -->
+          <section id="view-distribution" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Duplicate-Protected Claims</span></span>
+                <h1 class="module-header-title">Relief Distribution</h1>
+                <p class="module-header-desc">Release relief packs to Registry households. Duplicate claims for the same disaster event trigger a red <strong>"Already Received"</strong> warning and block stock deduction. (Try <code>HH-2026-003</code> + <code>Family Food Pack</code> to test!)</p>
+              </div>
+            </div>
+
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Release Relief Pack</h2></div>
+                <div class="portal-card-body">
+                  <form id="handa-dist-form" class="form-stack">
+                    <div id="handa-dist-banner" class="form-banner" role="alert"></div>
+                    <div class="form-field"><label class="form-label" for="dist-event">Disaster Event</label><select id="dist-event" class="form-select"></select></div>
+                    <div class="form-field"><label class="form-label" for="dist-household">Household (Central Registry)</label><select id="dist-household" class="form-select"></select></div>
+                    <div class="form-grid-2">
+                      <div class="form-field"><label class="form-label" for="dist-item">Relief Item</label><select id="dist-item" class="form-select"></select></div>
+                      <div class="form-field"><label class="form-label" for="dist-qty">Quantity</label><input type="number" id="dist-qty" class="form-input" min="1" value="1"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Verify Claim &amp; Release Relief</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Relief Distribution Log</h2></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Claim ID</th><th>Event</th><th>Household</th><th>Item &amp; Qty</th><th>Timestamp</th></tr></thead><tbody id="handa-dist-tbody"></tbody></table></div>
+                <div id="handa-dist-pagination" class="pagination-bar"></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 9. DISASTER EVENTS -->
+          <section id="view-events" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Event Tracking</span></span>
+                <h1 class="module-header-title">Disaster Event Management</h1>
+                <p class="module-header-desc">Create and manage active or closed disaster events used to scope relief distribution claims.</p>
+              </div>
+            </div>
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Create Disaster Event</h2></div>
+                <div class="portal-card-body">
+                  <form id="handa-event-form" class="form-stack">
+                    <div class="form-field"><label class="form-label" for="evt-name">Event Name</label><input type="text" id="evt-name" class="form-input" placeholder="e.g., Typhoon Preparedness Watch (Sample)" required></div>
+                    <div class="form-grid-2">
+                      <div class="form-field"><label class="form-label" for="evt-type">Hazard Category</label><select id="evt-type" class="form-select"><option>Typhoon / Heavy Rain</option><option>Flooding</option><option>Volcanic / Ashfall</option><option>Earthquake</option><option>Preparedness Drill</option></select></div>
+                      <div class="form-field"><label class="form-label" for="evt-status">Status</label><select id="evt-status" class="form-select"><option>Active</option><option>Closed</option></select></div>
+                    </div>
+                    <div class="form-field"><label class="form-label" for="evt-notes">Notes</label><input type="text" id="evt-notes" class="form-input" placeholder="Scope or drill notes"></div>
+                    <button type="submit" class="btn btn-primary btn-block">Add Event</button>
+                  </form>
+                </div>
+              </div>
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Recorded Events</h2></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Event ID</th><th>Name</th><th>Type</th><th>Status</th></tr></thead><tbody id="handa-events-tbody"></tbody></table></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 10. ALERTS & ADVISORIES (Resident Phase 1 Read-Only) -->
+          <section id="view-alerts" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Public Warning System (Sample)</span></span>
+                <h1 class="module-header-title">Alert Levels &amp; Advisories</h1>
+                <p class="module-header-desc">Current barangay alert status and safety advisories. Authorized DRRM Officers may publish updates; Residents view read-only bulletins.</p>
+              </div>
+            </div>
+            <div id="handa-alerts-publish-wrap" class="portal-card">
+              <div class="portal-card-header"><h2 class="portal-card-title">Publish Alert / Advisory (DRRM Officer)</h2></div>
+              <div class="portal-card-body">
+                <form id="handa-alert-form" class="form-stack">
+                  <div class="form-grid-2">
+                    <div class="form-field"><label class="form-label" for="alert-level-select">Current Alert Level (Sample)</label><select id="alert-level-select" class="form-select"><option value="Alert Level 1 — Normal Monitoring (Sample)">Level 1 — Normal Monitoring</option><option value="Alert Level 2 — Preparedness &amp; Pre-Emptive Monitoring (Sample)" selected>Level 2 — Pre-Emptive Monitoring</option><option value="Alert Level 3 — Mandatory Evacuation Advisory (Sample)">Level 3 — Mandatory Evacuation</option></select></div>
+                    <div class="form-field"><label class="form-label" for="alert-title">Advisory Title</label><input type="text" id="alert-title" class="form-input" placeholder="e.g., Heavy Rainfall Safety Advisory" required></div>
+                  </div>
+                  <div class="form-field"><label class="form-label" for="alert-body">Advisory Details</label><textarea id="alert-body" class="form-textarea" placeholder="Provide clear instructions for residents..." required></textarea></div>
+                  <button type="submit" class="btn btn-primary">Publish Advisory</button>
+                </form>
+              </div>
+            </div>
+            <div id="handa-alerts-list" class="form-stack"></div>
+          </section>
+
+          <!-- 11. ANNOUNCEMENTS (Resident Phase 1 Read-Only) -->
+          <section id="view-announcements" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Community Bulletins</span></span>
+                <h1 class="module-header-title">DRRM Announcements</h1>
+                <p class="module-header-desc">Public barangay preparedness announcements (read-only for Residents in Phase 1).</p>
+              </div>
+            </div>
+            <div id="handa-ann-publish-wrap" class="portal-card">
+              <div class="portal-card-header"><h2 class="portal-card-title">Post Official Announcement</h2></div>
+              <div class="portal-card-body">
+                <form id="handa-ann-form" class="form-stack">
+                  <div class="form-field"><label class="form-label" for="ann-title">Announcement Title</label><input type="text" id="ann-title" class="form-input" required></div>
+                  <div class="form-field"><label class="form-label" for="ann-body">Announcement Body</label><textarea id="ann-body" class="form-textarea" required></textarea></div>
+                  <button type="submit" class="btn btn-primary">Publish Announcement</button>
+                </form>
+              </div>
+            </div>
+            <div id="handa-ann-list" class="form-stack"></div>
+          </section>
+
+          <!-- 12. QR ID CARDS (Pure SVG Placeholder Pending Approved QR Library) -->
+          <section id="view-qr-cards" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Household Identification</span></span>
+                <h1 class="module-header-title">Printable Household QR ID Cards</h1>
+                <p class="module-header-desc">Printable emergency ID layout generated from the Resident Registry. Visual matrix is a pure-SVG placeholder; standards-compliant QR generation &amp; camera scanning libraries remain subject to committee approval.</p>
+              </div>
+              <div class="module-actions">
+                <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Print QR ID Cards</button>
+              </div>
+            </div>
+            <div class="alert-box">
+              <strong>Pending Library Approval Notice:</strong> In keeping with the strict Vanilla JS / no-external-library requirement, these cards render deterministic SVG placeholder matrices encoding each Household ID. Approved QR encoding/scanning libraries can be integrated once finalized by the DRRM committee.
+            </div>
+            <div id="handa-qr-grid" class="qr-card-grid"></div>
+          </section>
+
+          <!-- 13. BARANGAY MAP (Illustrative Hazard & Evacuation Overlay — Resident Read-Only Compatible) -->
+          <section id="view-map" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Illustrative DRRM Overlay · Barangay Dimagiba</span></span>
+                <h1 class="module-header-title">HANDA+ Barangay Map</h1>
+                <p class="module-header-desc">Illustrative community map centered on Barangay Dimagiba, Legazpi City, Albay showing sample purok risk levels and evacuation shelters (not live GPS; pending official DRRM geospatial confirmation).</p>
+              </div>
+              <div class="module-actions">
+                <a href="../index.html#community-map" class="btn btn-secondary btn-sm">Open Public Interactive Map</a>
+              </div>
+            </div>
+            <div class="portal-card">
+              <div class="portal-card-body" id="handa-map-container"></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/bicis-store.js"></script>
+  <script src="../js/portal-shell.js"></script>
+  <script src="../js/handa-plus.js"></script>
+</body>
+</html>

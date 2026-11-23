@@ -1,0 +1,202 @@
+/* ==========================================================================
+   BICIS — Responsive Layout Rules (Desktop, Tablet, Mobile)
+   Intentionally Designed for Every Screen Size
+   ========================================================================== */
+
+/* Tablet Landscape & Compact Desktop (<= 1120px) */
+@media (max-width: 1120px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero-editorial {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 0;
+  }
+
+  .hero-map-column,
+  .map-wrapper {
+    min-height: 500px;
+  }
+
+  .pillars-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .auth-grid {
+    grid-template-columns: 1fr;
+    max-width: 620px;
+    margin-inline: auto;
+  }
+
+  .auth-aside {
+    gap: 1.1rem;
+  }
+
+  .service-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet Portrait (<= 900px) */
+@media (max-width: 900px) {
+  .nav-menu,
+  .nav-actions .nav-auth-desktop {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: inline-flex;
+  }
+
+  .carousel-slide {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .carousel-slide-visual {
+    min-height: 150px;
+    padding: 1.15rem;
+  }
+
+  .carousel-artwork {
+    max-width: 185px;
+  }
+
+  .carousel-tabs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .carousel-tab {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .carousel-tab:nth-child(2n) {
+    border-right: none;
+  }
+
+  .split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile (<= 640px) */
+@media (max-width: 640px) {
+  :root {
+    --nav-height: 68px;
+  }
+
+  .brand-sub {
+    display: none;
+  }
+
+  .carousel-header-bar {
+    flex-wrap: wrap;
+  }
+
+  .carousel-tab {
+    padding: 0.8rem 0.85rem;
+  }
+
+  .carousel-tab-name {
+    font-size: 0.78rem;
+  }
+
+  .hero-headline {
+    font-size: clamp(2.35rem, 10vw, 3.1rem);
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .hero-meta-strip {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .hero-map-column,
+  .map-wrapper {
+    min-height: 440px;
+  }
+
+  .map-top-bar {
+    top: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .map-badge-pill {
+    font-size: 0.6rem;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .map-location-card {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    max-width: none;
+    padding: 0.8rem 0.95rem;
+  }
+
+  .map-detail-panel {
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: auto;
+  }
+
+  .map-interaction-hint {
+    display: none;
+  }
+
+  .pillars-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .privacy-notice-card {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  .privacy-notice-arrow {
+    display: none;
+  }
+
+  .info-list-row {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .modal-header,
+  .modal-body,
+  .modal-footer {
+    padding-inline: 1.25rem;
+  }
+
+  .toast-region {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+
+  .toast {
+    max-width: none;
+  }
+}

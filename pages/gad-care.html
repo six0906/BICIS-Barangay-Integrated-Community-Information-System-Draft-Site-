@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="GAD-CARE — Gender and Development Beneficiary Tagging, Assessments, Kit Inventory, and Distribution Tracking on BICIS.">
+  <title>GAD-CARE — BICIS</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/logos/bicis-favicon.svg">
+
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("bicis-theme");
+        var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "dark" || saved === "light" ? saved : (prefersDark ? "dark" : "light"));
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animations.css">
+  <link rel="stylesheet" href="../css/portal.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="portal-body">
+  <div class="portal-shell">
+    <aside id="portal-sidebar" class="portal-sidebar" aria-label="BICIS Portal Navigation"></aside>
+    <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
+
+    <div class="portal-workspace">
+      <header class="portal-topbar">
+        <div class="portal-topbar-left">
+          <button type="button" id="sidebar-mobile-trigger" class="sidebar-mobile-trigger" aria-label="Open portal sidebar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="portal-breadcrumb">
+            <span class="portal-breadcrumb-module">GAD-CARE · Gender &amp; Development</span>
+            <span id="portal-breadcrumb-page" class="portal-breadcrumb-page">Dashboard</span>
+          </div>
+        </div>
+        <div class="portal-topbar-right">
+          <div class="role-switcher-wrap">
+            <span class="role-switcher-label">Role Preview</span>
+            <select id="portal-role-select" class="role-switcher-select" aria-label="Switch proposed preview role"></select>
+          </div>
+          <button type="button" class="theme-toggle" data-theme-toggle aria-label="Toggle color theme" aria-pressed="false">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="4.9" y1="4.9" x2="6.7" y2="6.7"/><line x1="17.3" y1="17.3" x2="19.1" y2="19.1"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="4.9" y1="19.1" x2="6.7" y2="17.3"/><line x1="17.3" y1="6.7" x2="19.1" y2="4.9"/></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.7 6.7 0 0 0 9.8 9.8Z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="sample-data-strip">
+        <span><strong>Preview Notice:</strong> GAD-CARE reads resident records directly from the central Resident Registry and tracks sample supply stock for this session.</span>
+      </div>
+
+      <main class="portal-content">
+        <div id="gad-restricted" class="restricted-notice" style="display:none;">
+          <span class="badge badge--danger">Role Access Restricted</span>
+          <h1 class="serif-heading" style="font-size:1.75rem;">GAD-CARE Requires GAD Personnel or Admin Access</h1>
+          <p style="max-width:52ch;color:var(--text-secondary);font-size:0.92rem;">
+            Beneficiary assessments and distribution records contain sensitive resident information protected under RA 10173. Switch to Admin or GAD Personnel in the role preview selector to inspect this module.
+          </p>
+          <a href="portal.html#dashboard" class="btn btn-primary btn-sm">Return to Dashboard</a>
+        </div>
+
+        <div id="gad-views-root">
+          <!-- 1. DASHBOARD -->
+          <section id="view-dashboard" class="portal-view is-active">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>GAD-CARE Overview</span></span>
+                <h1 class="module-header-title">Gender &amp; Development Dashboard</h1>
+                <p class="module-header-desc">Track tagged beneficiaries, urgent assessments, low-stock &amp; expiring supplies, and kit distributions.</p>
+              </div>
+              <div class="module-actions">
+                <a href="#tagging" class="btn btn-secondary btn-sm">Tag Beneficiary</a>
+                <a href="#release" class="btn btn-primary btn-sm">Release Kit</a>
+              </div>
+            </div>
+
+            <div id="gad-kpi-grid" class="kpi-grid"></div>
+            <div id="gad-alerts-box" class="form-stack"></div>
+
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Urgent &amp; Pending Assessments</h2><a href="#assessments" class="inline-action-link">View All</a></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Resident</th><th>Need</th><th>Urgency</th><th>Status</th></tr></thead><tbody id="gad-dash-assessments"></tbody></table></div>
+              </div>
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Recent Kit Releases</h2><a href="#logs" class="inline-action-link">View Logs</a></div>
+                <div class="table-wrap"><table class="data-table"><thead><tr><th>Beneficiary</th><th>Kit / Supply</th><th>Qty</th><th>Date</th></tr></thead><tbody id="gad-dash-releases"></tbody></table></div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 2. BENEFICIARY TAGGING -->
+          <section id="view-tagging" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Resident Registry Lookup</span></span>
+                <h1 class="module-header-title">Beneficiary Tagging</h1>
+                <p class="module-header-desc">Select an existing resident from the central Resident Registry to assign GAD sector classification and priority without re-entering personal data.</p>
+              </div>
+            </div>
+
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Tag Resident from Registry</h2></div>
+                <div class="portal-card-body">
+                  <form id="gad-tag-form" class="form-stack">
+                    <div id="gad-tag-banner" class="form-banner" role="alert"></div>
+                    <div class="form-field">
+                      <label class="form-label" for="gad-tag-resident">Select Resident (Central Registry)</label>
+                      <select id="gad-tag-resident" class="form-select" required></select>
+                    </div>
+                    <div id="gad-tag-preview" class="alert-box" style="font-size:0.82rem;"></div>
+                    <div class="form-grid-2">
+                      <div class="form-field">
+                        <label class="form-label" for="gad-tag-sector">GAD Beneficiary Sector</label>
+                        <select id="gad-tag-sector" class="form-select">
+                          <option value="Pregnant Woman">Pregnant Woman</option>
+                          <option value="Lactating Mother">Lactating Mother</option>
+                          <option value="Women of Reproductive Age">Women of Reproductive Age</option>
+                          <option value="Infant (0-24 mos)">Infant (0-24 mos)</option>
+                          <option value="Elderly Woman">Elderly Woman</option>
+                          <option value="Elderly Woman / PWD">Elderly Woman / PWD</option>
+                          <option value="PWD">PWD</option>
+                        </select>
+                      </div>
+                      <div class="form-field">
+                        <label class="form-label" for="gad-tag-priority">Priority Level</label>
+                        <select id="gad-tag-priority" class="form-select">
+                          <option value="High">High</option>
+                          <option value="Medium">Medium</option>
+                          <option value="Standard">Standard</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="gad-tag-notes">Profiling Notes</label>
+                      <input type="text" id="gad-tag-notes" class="form-input" placeholder="e.g., Prenatal care follow-up, mobility need">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Save Beneficiary Tag</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="portal-card">
+                <div class="portal-card-header">
+                  <h2 class="portal-card-title">Tagged GAD Beneficiaries</h2>
+                  <select id="gad-beneficiary-filter" class="form-select" style="width:auto;padding:0.4rem 0.7rem;font-size:0.8rem;">
+                    <option value="all">All Status</option>
+                    <option value="served">Served</option>
+                    <option value="unserved">Unserved</option>
+                  </select>
+                </div>
+                <div class="table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th>Resident &amp; Purok</th><th>GAD Sector</th><th>Priority</th><th>Served</th></tr></thead>
+                    <tbody id="gad-beneficiaries-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 3. NEEDS ASSESSMENT -->
+          <section id="view-assessments" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Case Profiling</span></span>
+                <h1 class="module-header-title">Needs Assessment</h1>
+                <p class="module-header-desc">Record resident-specific GAD supply needs, flag urgent cases, and mark completed assessments.</p>
+              </div>
+            </div>
+
+            <div class="portal-grid-2">
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">New Needs Assessment</h2></div>
+                <div class="portal-card-body">
+                  <form id="gad-assess-form" class="form-stack">
+                    <div class="form-field">
+                      <label class="form-label" for="gad-assess-resident">Tagged Beneficiary</label>
+                      <select id="gad-assess-resident" class="form-select" required></select>
+                    </div>
+                    <div class="form-grid-2">
+                      <div class="form-field">
+                        <label class="form-label" for="gad-assess-need">Recommended Kit / Supply</label>
+                        <select id="gad-assess-need" class="form-select">
+                          <option value="Maternity Kit">Maternity Kit</option>
+                          <option value="Women's Hygiene Kit">Women's Hygiene Kit</option>
+                          <option value="Breastfeeding Supplies">Breastfeeding Supplies</option>
+                          <option value="Infant Care Supplies">Infant Care Supplies</option>
+                          <option value="Menstrual Care Products">Menstrual Care Products</option>
+                          <option value="Personal Care Supplies">Personal Care Supplies</option>
+                        </select>
+                      </div>
+                      <div class="form-field">
+                        <label class="form-label" for="gad-assess-urgency">Urgency</label>
+                        <select id="gad-assess-urgency" class="form-select">
+                          <option value="Urgent">Urgent</option>
+                          <option value="Standard">Standard</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="gad-assess-remarks">Assessment Remarks</label>
+                      <textarea id="gad-assess-remarks" class="form-textarea" placeholder="Document household condition and specific supply needs..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Record Assessment</button>
+                  </form>
+                </div>
+              </div>
+
+              <div class="portal-card">
+                <div class="portal-card-header"><h2 class="portal-card-title">Assessment Queue</h2></div>
+                <div class="table-wrap">
+                  <table class="data-table">
+                    <thead><tr><th>Resident</th><th>Need</th><th>Urgency</th><th>Status</th><th>Action</th></tr></thead>
+                    <tbody id="gad-assessments-tbody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 4. INVENTORY -->
+          <section id="view-inventory" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Supply Monitoring</span></span>
+                <h1 class="module-header-title">GAD-CARE Inventory</h1>
+                <p class="module-header-desc">Manage stock-in and stock-out across maternity, hygiene, breastfeeding, infant, menstrual, and personal care kits with low-stock and expiry alerts.</p>
+              </div>
+            </div>
+
+            <div class="portal-card">
+              <div class="portal-card-header"><h2 class="portal-card-title">Stock Adjustment (Stock-In / Stock-Out)</h2></div>
+              <div class="portal-card-body">
+                <form id="gad-stock-form" class="form-grid-3" style="align-items:end;">
+                  <div class="form-field">
+                    <label class="form-label" for="gad-stock-item">Supply Item</label>
+                    <select id="gad-stock-item" class="form-select"></select>
+                  </div>
+                  <div class="form-field">
+                    <label class="form-label" for="gad-stock-type">Movement &amp; Quantity</label>
+                    <div style="display:flex;gap:0.5rem;">
+                      <select id="gad-stock-type" class="form-select"><option value="in">Stock-In (+)</option><option value="out">Stock-Out (&minus;)</option></select>
+                      <input type="number" id="gad-stock-qty" class="form-input" min="1" value="5" style="max-width:100px;">
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Stock</button>
+                </form>
+                <div id="gad-stock-banner" class="form-banner" style="margin-top:0.85rem;" role="alert"></div>
+              </div>
+            </div>
+
+            <div class="portal-card">
+              <div class="portal-card-header"><h2 class="portal-card-title">Current Kit &amp; Supply Levels</h2></div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead><tr><th>Item</th><th>Category</th><th>Available Stock</th><th>Threshold</th><th>Expiry Date</th><th>Alerts</th></tr></thead>
+                  <tbody id="gad-inventory-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 5. ALLOCATION RULES -->
+          <section id="view-rules" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Distribution Guidelines</span></span>
+                <h1 class="module-header-title">Kit Allocation Rules</h1>
+                <p class="module-header-desc">Define standard kit quantities and claim frequencies per GAD beneficiary sector.</p>
+              </div>
+            </div>
+
+            <div class="portal-card">
+              <div class="portal-card-header"><h2 class="portal-card-title">Configured Sector Rules (Sample)</h2></div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead><tr><th>Rule ID</th><th>Target GAD Sector</th><th>Allocated Item</th><th>Qty / Claim</th><th>Frequency</th><th>Notes</th></tr></thead>
+                  <tbody id="gad-rules-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- 6. KIT RELEASE -->
+          <section id="view-release" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Controlled Distribution</span></span>
+                <h1 class="module-header-title">Kit Release</h1>
+                <p class="module-header-desc">Release GAD supplies with automatic duplicate-claim checks, inventory deduction, and negative-stock protection.</p>
+              </div>
+            </div>
+
+            <div class="portal-card" style="max-width:740px;">
+              <div class="portal-card-header"><h2 class="portal-card-title">Release Kit to Beneficiary</h2></div>
+              <div class="portal-card-body">
+                <form id="gad-release-form" class="form-stack">
+                  <div id="gad-release-banner" class="form-banner" role="alert"></div>
+                  <div class="form-field">
+                    <label class="form-label" for="gad-rel-resident">Tagged Beneficiary (from Registry)</label>
+                    <select id="gad-rel-resident" class="form-select" required></select>
+                  </div>
+                  <div class="form-grid-3">
+                    <div class="form-field">
+                      <label class="form-label" for="gad-rel-item">Kit / Supply</label>
+                      <select id="gad-rel-item" class="form-select" required></select>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="gad-rel-qty">Quantity</label>
+                      <input type="number" id="gad-rel-qty" class="form-input" min="1" value="1" required>
+                    </div>
+                    <div class="form-field">
+                      <label class="form-label" for="gad-rel-period">Claim Period</label>
+                      <input type="text" id="gad-rel-period" class="form-input" value="2026-Q4" required>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-block">Validate &amp; Release Kit</button>
+                </form>
+              </div>
+            </div>
+          </section>
+
+          <!-- 7. DISTRIBUTION LOGS -->
+          <section id="view-logs" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Audit History</span></span>
+                <h1 class="module-header-title">Distribution Logs</h1>
+                <p class="module-header-desc">Complete history of kits released to GAD beneficiaries.</p>
+              </div>
+              <div class="module-actions">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="window.print()">Print Logs</button>
+              </div>
+            </div>
+
+            <div class="portal-card">
+              <div class="toolbar">
+                <div class="toolbar-search">
+                  <input type="search" id="gad-logs-search" class="form-input" placeholder="Search beneficiary name, item, or period...">
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table class="data-table">
+                  <thead><tr><th>Log ID</th><th>Beneficiary</th><th>Purok</th><th>Kit / Supply</th><th>Qty</th><th>Period</th><th>Date</th></tr></thead>
+                  <tbody id="gad-logs-tbody"></tbody>
+                </table>
+              </div>
+              <div id="gad-logs-pagination" class="pagination-bar"></div>
+            </div>
+          </section>
+
+          <!-- 8. REPORTS -->
+          <section id="view-reports" class="portal-view">
+            <div class="module-header">
+              <div>
+                <span class="eyebrow eyebrow--accent"><span class="eyebrow-dot"></span><span>Printable Summaries</span></span>
+                <h1 class="module-header-title">GAD-CARE Reports</h1>
+                <p class="module-header-desc">Printable beneficiary, inventory, and distribution overview for Barangay Dimagiba GAD committee review.</p>
+              </div>
+              <div class="module-actions">
+                <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">Print GAD-CARE Report</button>
+              </div>
+            </div>
+            <div id="gad-reports-body" class="form-stack"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/theme.js"></script>
+  <script src="../js/script.js"></script>
+  <script src="../js/bicis-store.js"></script>
+  <script src="../js/portal-shell.js"></script>
+  <script src="../js/gad-care.js"></script>
+</body>
+</html>
